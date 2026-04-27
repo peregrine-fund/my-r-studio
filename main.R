@@ -48,5 +48,6 @@ ggplot(data = industrial_production, aes(x = IPG326S_CH1)) +
 
 #finding outliers using zscore
 industrial_production$growth_zscore <- (industrial_production$IPG326S_CH1 - mean(industrial_production$IPG326S_CH1, na.rm = TRUE))/sd(industrial_production$IPG326S_CH1, na.rm=TRUE)
+#creating additional column for zscores in order to better assign outliers to observations
 outliers_z <- industrial_production[abs(industrial_production$growth_zscore) > 3, ]
 print(outliers_z)
