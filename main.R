@@ -35,6 +35,11 @@ max_growth <- industrial_production[which.max(industrial_production$IPG326S_CH1)
 min_growth <- industrial_production[which.min(industrial_production$IPG326S_CH1), ]
 print(max_growth)
 print(min_growth)
+#standard deviation
+sd_industrialproduction_volumes <- sd(industrial_production$IPG326S, na.rm = TRUE)
+print(sd_industrialproduction_volumes)
+sd_industrialproduction_growth <- sd(industrial_production$IPG326S_CH1, na.rm = TRUE)
+print(sd_industrialproduction_growth)
 #boxplot for growth rates
 ggplot(data = industrial_production, aes(x = IPG326S_CH1)) +
   geom_boxplot()
