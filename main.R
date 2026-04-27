@@ -1,5 +1,5 @@
 # 1. Load Data
-industrial_production = read.csv("fed-non-durable.csv")
+industrial_production = read.csv("fredgraph_production")
 industrial_production$observation_date <- as.Date(industrial_production$observation_date, format = "%Y-%m-%d")
 
 library(ggplot2)
