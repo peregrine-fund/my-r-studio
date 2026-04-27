@@ -1,6 +1,6 @@
 # 1. Load Data
 industrial_production = read.csv("fredgraph_production")
-industrial_production$observation_date <- as.Date(industrial_production$observation_date, format = "%Y-%m-%d")
+industrial_production$observation_date <- as.Date(industrial_production$observation_date, format = "%Y-%m-%d") #converting date into math object
 
 library(ggplot2)
 library(dplyr)
