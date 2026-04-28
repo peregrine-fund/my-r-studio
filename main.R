@@ -10,7 +10,7 @@ mean_totalindustry <- mean(industrial_production_totalindex$INDPRO_PC1)
 print(median_totalindustry)
 print(mean_totalindustry)
 max_growthTI <- industrial_production_totalindex[which.max(industrial_production_totalindex$INDPRO_PC1), ]
-min_growthTI <- industrial_production[which.min(industrial_production_totalindex$INDPRO_PC1), ]
+min_growthTI <- industrial_production_totalindex[which.min(industrial_production_totalindex$INDPRO_PC1), ]
 print(max_growthTI)
 print(min_growthTI)
 
