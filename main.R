@@ -51,3 +51,64 @@ industrial_production$growth_zscore <- (industrial_production$IPG326S_CH1 - mean
 #creating additional column for zscores in order to better assign outliers to observations
 outliers_z <- industrial_production[abs(industrial_production$growth_zscore) > 3, ]
 print(outliers_z)
+
+workers_stats <- read.csv("rubber-workers-data.csv", sep = ";", check.names = FALSE)
+
+
+wits_data <- read.csv("WITS-By-HS6Product(By-HS6Product).csv", sep = ";", stringsAsFactors = FALSE)
+# Clean column names
+names(wits_data) <- trimws(names(wits_data))
+
+dfexp_q1 <- quantile(wits_data$Trade.Value.1000USD, probs = 0.25, na.rm = TRUE)
+dfexp_q3 <- quantile(wits_data$Trade.Value.1000USD, probs = 0.75, na.rm = TRUE)
+IQR = dfexp_q3 - dfexp_q1
+observations <- sum(wits_data$TradeFlow == 'Export', na.rm = TRUE)
+Freedman_Diaconis_rule = (2*(IQR))/(observations^(1/3))
+print(Freedman_Diaconis_rule)
+#basic export histogram
+ggplot(wits_data,aes(x = Trade.Value.1000USD)) +
+  ggtitle('histogram of volume of exports') +
+  labs(x = 'Trade value in 1000 USD') +
+  geom_histogram(binwidth = Freedman_Diaconis_rule)
+#log export histogram
+ggplot(wits_data,aes(x = Trade.Value.1000USD)) +
+  ggtitle('log-transformed scale histogram of volume of exports') +
+  labs(x = 'Trade value in 1000 USD') +
+  scale_x_log10() +
+  geom_histogram()
+#comparing top_10 exporters
+top_10_value <- wits_data %>%
+  arrange(desc(`Trade.Value.1000USD`)) %>%
+  head(10)
+ggplot(top_10_value, aes(x = reorder(Reporter, `Trade.Value.1000USD`), y = `Trade.Value.1000USD`)) +
+  geom_bar(stat = 'identity') +
+  theme_minimal() +
+  labs(title = 'Top 10 Tire Exporters in 2024',
+       x = 'Country',
+       y = 'Trade Value in 1000 USD')
+
+#export data in 2020
+wits_data2020 <- read.csv('WITS-By-HS6Product(1)(By-HS6Product).csv',sep = ';', stringsAsFactors = FALSE)
+names(wits_data2020) <- trimws(names(wits_data2020))
+top_10_value2020 <- wits_data2020 %>%
+  arrange(desc(`Trade.Value.1000USD`)) %>%
+  head(10)
+ggplot(top_10_value2020, aes(x = reorder(Reporter, `Trade.Value.1000USD`), y = `Trade.Value.1000USD`)) + 
+  geom_bar(stat='identity') +
+  theme_minimal() +
+  labs(title = 'Top 10 Tire Exporters in 2020',
+       x = 'Country',
+       y = 'Trade value in 1000 USD')
+
+#export data in 2014
+wits_data2014 <- read.csv('WITS-By-HS6Product(2)(By-HS6Product).csv',sep = ';', stringsAsFactors = FALSE)
+names(wits_data2014) <- trimws(names(wits_data2014))
+top_10_value2014 <- wits_data2014 %>%
+  arrange(desc(`Trade.Value.1000USD`)) %>%
+  head(10)
+ggplot(top_10_value2014, aes(x = reorder(Reporter, `Trade.Value.1000USD`), y = `Trade.Value.1000USD`)) + 
+  geom_bar(stat='identity') +
+  theme_minimal() +
+  labs(title = 'Top 10 Tire Exporters in 2014',
+       x = 'Country',
+       y = 'Trade value in 1000 USD')
