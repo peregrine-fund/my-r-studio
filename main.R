@@ -1,9 +1,19 @@
+
+
+library(ggplot2)
+library(dplyr)
+library(here)
+# use "here" library because we used git and colleges r studio had problem with paths.
+introduction = here("data","introduction")
+comparision= here("data","comparision")
+
+
 #Load Data for tire industry
-industrial_production = read.csv("fredgraph_production_nondurable_goods_tires.csv")
+industrial_production = read.csv(file.path(introduction,"fredgraph_production_nondurable_goods_tires.csv"))
 industrial_production$observation_date <- as.Date(industrial_production$observation_date, format = "%Y-%m-%d") #converting date into math object
 
 #loading data for the industry as a whole
-industrial_production_totalindex <- read.csv("fred_industrial_production_total_index.csv", header = TRUE, stringsAsFactors = FALSE)
+industrial_production_totalindex <- read.csv(file.path(introduction,"fred_industrial_production_total_index.csv"), header = TRUE, stringsAsFactors = FALSE)
 print(industrial_production_totalindex)
 median_totalindustry <- median(industrial_production_totalindex$INDPRO_PC1)
 mean_totalindustry <- mean(industrial_production_totalindex$INDPRO_PC1)
@@ -14,8 +24,8 @@ min_growthTI <- industrial_production_totalindex[which.min(industrial_production
 print(max_growthTI)
 print(min_growthTI)
 
-library(ggplot2)
-library(dplyr)
+
+correlation="./data/correlation"
 #time series graph for production volumes
 ggplot(industrial_production, aes(x = observation_date, y = IPG326S)) +
   geom_line() +
@@ -27,6 +37,7 @@ ggplot(industrial_production, aes(x = observation_date, y = IPG326S)) +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
+ggsave(file.path(introduction, "timeseries_productionvolume.png"))
 
 #time series graph for production volumes growth rates
 ggplot(industrial_production, aes(x = observation_date, y = IPG326S_CH1)) +
@@ -39,6 +50,7 @@ ggplot(industrial_production, aes(x = observation_date, y = IPG326S_CH1)) +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
+ggsave(file.path(introduction, "timeseries_growthrates.png"))
 
 #median, mean, max, min for growth rates
 print(median(industrial_production$IPG326S_CH1, na.rm = TRUE))
@@ -64,9 +76,9 @@ industrial_production$growth_zscore <- (industrial_production$IPG326S_CH1 - mean
 outliers_z <- industrial_production[abs(industrial_production$growth_zscore) > 3, ]
 print(outliers_z)
 
-workers_stats <- read.csv("rubber-workers-data.csv", sep = ";", check.names = FALSE)
+workers_stats <- read.csv(file.path(introduction,"rubber-workers-data.csv"), sep = ";", check.names = FALSE)
 
-wits_data <- read.csv("WITS-By-HS6Product(By-HS6Product).csv", sep = ";", stringsAsFactors = FALSE)
+wits_data <- read.csv(file.path(introduction,"WITS-By-HS6Product(By-HS6Product).csv"), sep = ";", stringsAsFactors = FALSE)
 print(wits_data)
 # Clean column names
 names(wits_data) <- trimws(names(wits_data))
@@ -82,17 +94,27 @@ ggplot(wits_data,aes(x = Quantity)) +
   ggtitle('histogram of volumes of exports') +
   labs(x = 'Quantity') +
   geom_histogram()
+ggsave(file.path(introduction, "histogramofvolumesofexports.png"))
+
 #log export histogram
 ggplot(wits_data,aes(x = Quantity)) +
   ggtitle('log-transformed scale histogram of volume of exports') +
   labs(x = 'Quantity') +
   scale_x_log10() +
   geom_histogram()
-#comparing top_10 exporters
+ggsave(file.path(introduction, "loghistogramofexports.png"))
+
+
+
+
+
+
+
+#comparing top_20 exporters $$$ here was 10 before
 top_20_value <- wits_data %>%
   arrange(desc(`Trade.Value.1000USD`)) %>%
   head(20)
-ggplot(top_10_value, aes(x = reorder(Reporter, `Trade.Value.1000USD`), y = `Trade.Value.1000USD`, fill = Reporter == 'United States')) +
+ggplot(top_20_value, aes(x = reorder(Reporter, `Trade.Value.1000USD`), y = `Trade.Value.1000USD`, fill = Reporter == 'United States')) +
   geom_bar(stat = 'identity', show.legend = FALSE) +
   theme_minimal() +
   labs(title = 'Top 20 Tire Exporters in 2024',
@@ -101,7 +123,7 @@ ggplot(top_10_value, aes(x = reorder(Reporter, `Trade.Value.1000USD`), y = `Trad
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 #export data in 2020
-wits_data2020 <- read.csv("WITS-By-HS6Product(4)(By-HS6Product).csv",sep = ';', stringsAsFactors = FALSE)
+wits_data2020 <- read.csv(file.path(introduction,"WITS-By-HS6Product(4)(By-HS6Product).csv"),sep = ';', stringsAsFactors = FALSE) #$$$ doesnt exist
 names(wits_data2020) <- trimws(names(wits_data2020))
 print(wits_data2020)
 top_20_value2020 <- wits_data2020 %>%
@@ -116,7 +138,8 @@ ggplot(top_20_value2020, aes(x = reorder(Reporter, `Trade.Value.1000USD`), y = `
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 #export data in 2014
-wits_data2014 <- read.csv("WITS-By-HS6Product(3)(By-HS6Product).csv",sep = ';', stringsAsFactors = FALSE)
+
+wits_data2014 <- read.csv(file.path(introduction,"WITS-By-HS6Product(3)(By-HS6Product).csv"),sep = ';', stringsAsFactors = FALSE)
 names(wits_data2014) <- trimws(names(wits_data2014))
 print(wits_data2014)
 top_10_value2014 <- wits_data2014 %>%
@@ -129,3 +152,4 @@ ggplot(top_10_value2014, aes(x = reorder(Reporter, `Trade.Value.1000USD`), y = `
        x = 'Country',
        y = 'Trade value in 1000 USD') +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
