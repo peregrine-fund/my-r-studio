@@ -1,6 +1,18 @@
-# 1. Load Data
+#Load Data for tire industry
 industrial_production = read.csv("fredgraph_production_nondurable_goods_tires.csv")
 industrial_production$observation_date <- as.Date(industrial_production$observation_date, format = "%Y-%m-%d") #converting date into math object
+
+#loading data for the industry as a whole
+industrial_production_totalindex <- read.csv("fred_industrial_production_total_index.csv", header = TRUE, stringsAsFactors = FALSE)
+print(industrial_production_totalindex)
+median_totalindustry <- median(industrial_production_totalindex$INDPRO_PC1)
+mean_totalindustry <- mean(industrial_production_totalindex$INDPRO_PC1)
+print(median_totalindustry)
+print(mean_totalindustry)
+max_growthTI <- industrial_production_totalindex[which.max(industrial_production_totalindex$INDPRO_PC1), ]
+min_growthTI <- industrial_production[which.min(industrial_production_totalindex$INDPRO_PC1), ]
+print(max_growthTI)
+print(min_growthTI)
 
 library(ggplot2)
 library(dplyr)
