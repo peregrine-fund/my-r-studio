@@ -5,3 +5,8 @@
 *.synctex.gz
 *.pdf
 .Rproj.user
+.RData
+.Rhistory
+.Ruser
+.Rproj.user/
+.*.swp
