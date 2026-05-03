@@ -217,3 +217,16 @@ ggplot(df_unit_labor_costs, aes(x = Year, y = Value)) +
     x = 'Year',
     y = 'Percentage Change'
   )
+#all three together
+df_triple_labour <- long_df %>%
+  filter(
+   Measure %in% c('Real sectoral output', 'Output per worker', 'Unit labor costs'),
+    grepl('% Change', Units) 
+  )
+ggplot(df_triple_labour, aes(x = Year, y = Value, color = Measure)) +
+  geom_line() +
+  theme_minimal() +
+  labs(
+    x = 'Year',
+    y = 'Percentage Change'
+  )
