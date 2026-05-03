@@ -149,6 +149,7 @@ ggplot(top_10_value2014, aes(x = reorder(Reporter, `Trade.Value.1000USD`), y = `
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 #labor stats
+#cleaning of the dataset + I will comment on that later
 library(readr)
 df <- read_delim('rubber-workers-data.csv', delim = ';', na = 'N.A.', show_col_types = FALSE)
 target_measures <- c(
@@ -172,7 +173,7 @@ long_df <- clean_df %>%
     Year = as.numeric(Year),     
     Value = as.numeric(Value)   
   )
-print(long_df)
+#filtering data for real sectoral output
 df_labour <- long_df %>%
   filter(
     Measure == 'Real sectoral output',
@@ -188,7 +189,7 @@ ggplot(df_labour, aes(x = Year, y = Value)) +
     x = 'Year',
     y = 'Percentage Change'
   )
-
+#filtering data for output per worker
 df_output_per_worker <- long_df %>%
   filter(
     Measure == 'Output per worker',
@@ -202,7 +203,7 @@ ggplot(df_output_per_worker, aes(x = Year, y = Value)) +
     x = 'Year',
     y = 'Percentage Change'
   )
-
+#filtering data for labor costs
 df_unit_labor_costs <- long_df %>%
   filter(
     Measure == 'Unit labor costs',
