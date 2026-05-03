@@ -105,12 +105,6 @@ ggplot(wits_data,aes(x = Quantity)) +
   geom_histogram()
 ggsave(file.path(introduction, "loghistogramofexports.png"))
 
-
-
-
-
-
-
 #comparing top_20 exporters $$$ here was 10 before
 top_20_value <- wits_data %>%
   arrange(desc(`Trade.Value.1000USD`)) %>%
@@ -154,3 +148,71 @@ ggplot(top_10_value2014, aes(x = reorder(Reporter, `Trade.Value.1000USD`), y = `
        y = 'Trade value in 1000 USD') +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+#labor stats
+library(readr)
+df <- read_delim('rubber-workers-data.csv', delim = ';', na = 'N.A.', show_col_types = FALSE)
+target_measures <- c(
+  'Unit labor costs', 'Capital share', 'Capital costs', 'Intermediate inputs share', 'Intermediate inputs costs', 'Employment', 'Real sectoral output', 'Output per worker')
+clean_df <- df %>%
+  filter(Measure %in% target_measures) %>%
+  select(
+    Sector, NAICS, Industry, Digit, Basis, Measure, Units,
+    all_of(as.character(2000:2024))
+  )
+write_csv(clean_df, 'cleaned_rubber_data_2000_2024.csv')
+head(clean_df)
+library(tidyverse)
+long_df <- clean_df %>%
+  pivot_longer(
+    cols = `2000`:`2024`,        
+    names_to = 'Year',           
+    values_to = 'Value'         
+  ) %>%
+  mutate(
+    Year = as.numeric(Year),     
+    Value = as.numeric(Value)   
+  )
+print(long_df)
+df_labour <- long_df %>%
+  filter(
+    Measure == 'Real sectoral output',
+    grepl('% Change', Units) 
+  )
+print(nrow(df_labour))
+
+ggplot(df_labour, aes(x = Year, y = Value)) +
+  geom_line() +
+  theme_minimal() +
+  labs(
+    title = 'real sectoral output',
+    x = 'Year',
+    y = 'Percentage Change'
+  )
+
+df_output_per_worker <- long_df %>%
+  filter(
+    Measure == 'Output per worker',
+    grepl('% Change', Units) 
+  )
+ggplot(df_output_per_worker, aes(x = Year, y = Value)) +
+  geom_line() +
+  theme_minimal() +
+  labs(
+    title = 'output per worker',
+    x = 'Year',
+    y = 'Percentage Change'
+  )
+
+df_unit_labor_costs <- long_df %>%
+  filter(
+    Measure == 'Unit labor costs',
+    grepl('% Change', Units) 
+  )
+ggplot(df_unit_labor_costs, aes(x = Year, y = Value)) +
+  geom_line() +
+  theme_minimal() +
+  labs(
+    title = 'Unit labor costs',
+    x = 'Year',
+    y = 'Percentage Change'
+  )
