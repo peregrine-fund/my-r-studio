@@ -5,7 +5,7 @@
 
 ## LUKAS
 
-[for labor.csv maybe look at unit labor cost, how much is capital how much intermediate] ::
+<!--for labor.csv maybe look at unit labor cost, how much is capital how much intermediate-->
 ---
 ## Jacob Notes
 add imp-code.txt - its a connection table, show how products labeled by HS ( harmonized standard, the first number) converts to NAICS (nort america industry codes, 2 last number)  

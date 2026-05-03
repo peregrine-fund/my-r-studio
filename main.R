@@ -77,6 +77,7 @@ outliers_z <- industrial_production[abs(industrial_production$growth_zscore) > 3
 print(outliers_z)
 
 workers_stats <- read.csv(file.path(introduction,"rubber-workers-data.csv"), sep = ";", check.names = FALSE)
+table(workers_stats)
 
 wits_data <- read.csv(file.path(introduction,"WITS-By-HS6Product(By-HS6Product).csv"), sep = ";", stringsAsFactors = FALSE)
 print(wits_data)

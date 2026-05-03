@@ -1,0 +1,8 @@
+Codes 	Titles	US Business
+Entities
+3262	Rubber Product Manufacturing	3,180
+326211	Tire Manufacturing (except Retreading)	492
+326212	Tire Retreading	107
+326220	Rubber and Plastics Hoses and Belting Manufacturing	355
+326291	Rubber Product Manufacturing for Mechanical Use	252
+326299	All Other Rubber Product Manufacturing	1,974
