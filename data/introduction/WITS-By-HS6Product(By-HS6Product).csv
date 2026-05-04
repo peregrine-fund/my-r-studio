@@ -1,121 +1,75 @@
-Reporter;TradeFlow;ProductCode;Product Description;Year;Partner;Trade Value 1000USD;Quantity;Quantity Unit
-China;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        8984941.09;3.48788e+008;Item
-European Union;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        6022809.53;6.86625e+007;Item
-Germany;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        4027692.48;5.30751e+007;Item
-Thailand;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        3810710.49;;
-Korea, Rep.;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        2617528.38;3.75817e+007;Item
-Japan;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        2003547.07;2.97161e+007;Item
-Mexico;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        2000753.21;2.84578e+007;Item
-Czech Republic;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        1969298.30;2.75834e+007;Item
-Romania;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        1965387.33;3.49811e+007;Item
-Hungary;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        1923485.05;3.31266e+007;Item
-Poland;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        1892544.87;3.16259e+007;Item
-France;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        1697214.40;2.02482e+007;Item
-Netherlands;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        1627315.19;2.11604e+007;Item
-Spain;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        1549038.37;2.12337e+007;Item
-Portugal;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        1456135.84;2.01274e+007;Item
-United States;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        1454138.38;;
-Italy;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        1453976.56;1.84665e+007;Item
-Indonesia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        1289717.49;;
-Slovak Republic;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;        1247995.06;1.94931e+007;Item
-Canada;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         817287.61;1.1643e+007;Item
-Turkey;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         801412.46;1.65514e+007;Item
-Belgium;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         629800.53;8.28061e+006;Item
-Cambodia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         599007.43;1.48531e+007;Item
-Serbia, FR(Serbia/Montenegro);Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         576644.29;1.32439e+007;Item
-Brazil;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         494798.53;7.78214e+006;Item
-Slovenia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         464114.33;9.2842e+006;Item
-Other Asia, nes;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         399603.22;9.51209e+006;Item
-Philippines;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         392456.39;8.62913e+006;Item
-Chile;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         369686.56;6.01824e+006;Item
-Finland;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         311059.11;3.60204e+006;Item
-United Kingdom;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         278695.34;2.8573e+006;Item
-India;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         249921.04;8.65151e+006;Item
-Malaysia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         211300.92;;
-Costa Rica;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         176063.56;2.76422e+006;Item
-South Africa;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         146793.96;1.68331e+006;Item
-Sweden;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;         118366.85;1.299e+006;Item
-Austria;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          90282.62;1.29625e+006;Item
-Singapore;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          83111.59;976602;Item
-Latvia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          55653.13;732709;Item
-Croatia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          54195.41;684766;Item
-Lithuania;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          48910.01;387971;Item
-Peru;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          45386.80;1.14705e+006;Item
-Luxembourg;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          35244.78;315607;Item
-Denmark;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          34151.50;709102;Item
-Argentina;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          31506.06;617765;Item
-Hong Kong, China;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          27873.43;752375;Item
-Kazakhstan;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          24092.82;254876;Item
-Ecuador;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          23107.82;282529;Item
-Switzerland;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          20364.18;265043;Item
-Estonia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          18900.00;315243;Item
-Ireland;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          14633.09;222604;Item
-Ukraine;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          14252.54;545965;Item
-Uzbekistan;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          12873.02;554657;Item
-Georgia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          12712.00;78346;Item
-Australia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;          11977.24;590468;Item
-Greece;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;           9774.85;;
-Oman;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;           8800.26;138119;Item
-Saudi Arabia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;           8231.39;118184;Item
-Algeria;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;           8175.37;128311;Item
-Sri Lanka;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;           7608.96;340550;Item
-Bahrain;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;           6565.15;66792;Item
-Norway;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;           6181.90;62190;Item
-Morocco;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;           3429.84;103318;Item
-Jordan;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;           3015.66;47330.3;Item
-Kuwait;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;           2517.93;39518.6;Item
-Bulgaria;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;           2343.94;46709;Item
-Lebanon;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;           1689.43;26524.3;Item
-Guatemala;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;           1188.83;17068.9;Item
-Bosnia and Herzegovina;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;           1134.15;16283.8;Item
-Tunisia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;           1106.39;17370.5;Item
-New Zealand;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;           1030.63;15814;Item
-Kyrgyz Republic;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;            841.80;31000;Item
-Uganda;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;            712.02;5767;Item
-Armenia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;            640.00;2177;Item
-Colombia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;            383.51;6428;Item
-Zambia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;            270.26;4243.05;Item
-Kenya;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;            266.60;2643;Item
-Senegal;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;            238.27;3740.81;Item
-Namibia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;            198.81;2045;Item
-Israel;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;            196.00;3077.22;Item
-Pakistan;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;            180.12;14222;Item
-Togo;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;            171.59;2463.64;Item
-Bahamas, The;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;            162.46;20160;Item
-Tanzania;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;            128.64;884;Item
-Paraguay;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             96.40;1384.08;Item
-Dominican Republic;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             88.37;1628;Item
-Panama;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             75.65;1216;Item
-Trinidad and Tobago;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             63.65;9149;Item
-Iceland;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             58.66;842.243;Item
-El Salvador;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             47.27;741.927;Item
-Fiji;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             37.45;608;Item
-Azerbaijan;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             37.37;478;Item
-Cote d'Ivoire;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             37.23;584.476;Item
-Egypt, Arab Rep.;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             35.28;506.493;Item
-Brunei;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             30.83;576;Item
-Mauritius;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             27.32;212;Item
-Zimbabwe;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             27.19;390.418;Item
-Uruguay;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             26.74;300;Item
-North Macedonia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             26.29;332;Item
-Mozambique;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             20.33;100;Item
-Benin;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             20.20;317.108;Item
-Angola;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             16.47;258.616;Item
-Honduras;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             15.46;242.799;Item
-Moldova;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             13.44;403;Item
-Mauritania;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             12.35;193.85;Item
-Antigua and Barbuda;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;             12.33;1087;Item
-Jamaica;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;              9.56;64;Item
-Yemen;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;              8.39;131.711;Item
-Bolivia;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;              8.22;128.986;Item
-Malta;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;              5.73;81;Item
-Suriname;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;              5.24;64;Item
-Lesotho;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;              3.41;35;Item
-Barbados;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;              2.10;30.209;Item
-Gambia, The;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;              1.57;24.64;Item
-Nicaragua;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;              0.84;13.188;Item
-Guyana;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;              0.83;4;Item
-Malawi;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;              0.23;9;Item
-Grenada;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;              0.13;1.884;Item
-Samoa;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;              0.12;181;Item
-Montenegro;Export;401110;New pneumatic tyres, of rubber of a kind used o;2024; World;              0.02;4;Item
+"Standard Report - Imports"
+"Current date: 05/04/2026 10:16 AM (Eastern Daylight Time)"
+"Measures: Customs Value (Gen) ($US)"
+"Commodity";"Country";"Time";"Customs Value (Gen) ($US)";
+"4011 New Pneumatic Tires, Of Rubber";"Albania";"2025";"2,454"
+"4011 New Pneumatic Tires, Of Rubber";"Algeria";"2025";"734,269"
+"4011 New Pneumatic Tires, Of Rubber";"Argentina";"2025";"737,250"
+"4011 New Pneumatic Tires, Of Rubber";"Armenia";"2025";"750"
+"4011 New Pneumatic Tires, Of Rubber";"Australia";"2025";"39,697"
+"4011 New Pneumatic Tires, Of Rubber";"Austria";"2025";"31,509"
+"4011 New Pneumatic Tires, Of Rubber";"Belarus";"2025";"3,462"
+"4011 New Pneumatic Tires, Of Rubber";"Belgium";"2025";"115,627"
+"4011 New Pneumatic Tires, Of Rubber";"Brazil";"2025";"483,230,184"
+"4011 New Pneumatic Tires, Of Rubber";"Bulgaria";"2025";"117,072"
+"4011 New Pneumatic Tires, Of Rubber";"Cambodia";"2025";"1,099,575,824"
+"4011 New Pneumatic Tires, Of Rubber";"Canada";"2025";"1,905,589,885"
+"4011 New Pneumatic Tires, Of Rubber";"Chile";"2025";"372,238,033"
+"4011 New Pneumatic Tires, Of Rubber";"China";"2025";"547,582,399"
+"4011 New Pneumatic Tires, Of Rubber";"Colombia";"2025";"35,228,934"
+"4011 New Pneumatic Tires, Of Rubber";"Costa Rica";"2025";"149,381,929"
+"4011 New Pneumatic Tires, Of Rubber";"Croatia";"2025";"2,159,185"
+"4011 New Pneumatic Tires, Of Rubber";"Czech Republic";"2025";"273,906,950"
+"4011 New Pneumatic Tires, Of Rubber";"Denmark";"2025";"19,914"
+"4011 New Pneumatic Tires, Of Rubber";"Dominican Republic";"2025";"1,040"
+"4011 New Pneumatic Tires, Of Rubber";"Ecuador";"2025";"36,966,475"
+"4011 New Pneumatic Tires, Of Rubber";"Egypt";"2025";"639,560"
+"4011 New Pneumatic Tires, Of Rubber";"El Salvador";"2025";"61,731"
+"4011 New Pneumatic Tires, Of Rubber";"Finland";"2025";"29,572,331"
+"4011 New Pneumatic Tires, Of Rubber";"France";"2025";"286,121,839"
+"4011 New Pneumatic Tires, Of Rubber";"Germany";"2025";"263,470,419"
+"4011 New Pneumatic Tires, Of Rubber";"Guadeloupe";"2025";"2,383"
+"4011 New Pneumatic Tires, Of Rubber";"Hong Kong";"2025";"280,613"
+"4011 New Pneumatic Tires, Of Rubber";"Hungary";"2025";"97,695,015"
+"4011 New Pneumatic Tires, Of Rubber";"India";"2025";"522,455,648"
+"4011 New Pneumatic Tires, Of Rubber";"Indonesia";"2025";"761,126,966"
+"4011 New Pneumatic Tires, Of Rubber";"Ireland";"2025";"129,021"
+"4011 New Pneumatic Tires, Of Rubber";"Israel";"2025";"2,016,020"
+"4011 New Pneumatic Tires, Of Rubber";"Italy";"2025";"143,425,543"
+"4011 New Pneumatic Tires, Of Rubber";"Japan";"2025";"1,596,396,681"
+"4011 New Pneumatic Tires, Of Rubber";"Kazakhstan";"2025";"6,160"
+"4011 New Pneumatic Tires, Of Rubber";"Korea, South";"2025";"865,323,838"
+"4011 New Pneumatic Tires, Of Rubber";"Latvia";"2025";"49,024"
+"4011 New Pneumatic Tires, Of Rubber";"Luxembourg";"2025";"25,500,888"
+"4011 New Pneumatic Tires, Of Rubber";"Malaysia";"2025";"169,276,646"
+"4011 New Pneumatic Tires, Of Rubber";"Maldives";"2025";"1,500"
+"4011 New Pneumatic Tires, Of Rubber";"Mexico";"2025";"2,059,832,164"
+"4011 New Pneumatic Tires, Of Rubber";"Morocco";"2025";"67,810,583"
+"4011 New Pneumatic Tires, Of Rubber";"Netherlands";"2025";"15,095,938"
+"4011 New Pneumatic Tires, Of Rubber";"Pakistan";"2025";"45,023,332"
+"4011 New Pneumatic Tires, Of Rubber";"Panama";"2025";"16,250"
+"4011 New Pneumatic Tires, Of Rubber";"Paraguay";"2025";"69,294"
+"4011 New Pneumatic Tires, Of Rubber";"Peru";"2025";"19,197,044"
+"4011 New Pneumatic Tires, Of Rubber";"Philippines";"2025";"248,362,505"
+"4011 New Pneumatic Tires, Of Rubber";"Poland";"2025";"75,122,394"
+"4011 New Pneumatic Tires, Of Rubber";"Portugal";"2025";"393,714,194"
+"4011 New Pneumatic Tires, Of Rubber";"Romania";"2025";"237,791,266"
+"4011 New Pneumatic Tires, Of Rubber";"Russia";"2025";"533"
+"4011 New Pneumatic Tires, Of Rubber";"Saudi Arabia";"2025";"113,087"
+"4011 New Pneumatic Tires, Of Rubber";"Serbia";"2025";"308,609,724"
+"4011 New Pneumatic Tires, Of Rubber";"Singapore";"2025";"449,102"
+"4011 New Pneumatic Tires, Of Rubber";"Slovakia";"2025";"309,350,696"
+"4011 New Pneumatic Tires, Of Rubber";"Slovenia";"2025";"4,733,414"
+"4011 New Pneumatic Tires, Of Rubber";"South Africa";"2025";"15,261,802"
+"4011 New Pneumatic Tires, Of Rubber";"Spain";"2025";"199,546,211"
+"4011 New Pneumatic Tires, Of Rubber";"Sri Lanka";"2025";"44,293,977"
+"4011 New Pneumatic Tires, Of Rubber";"Sweden";"2025";"33,214"
+"4011 New Pneumatic Tires, Of Rubber";"Switzerland";"2025";"89,452"
+"4011 New Pneumatic Tires, Of Rubber";"Taiwan";"2025";"167,403,144"
+"4011 New Pneumatic Tires, Of Rubber";"Thailand";"2025";"3,661,754,187"
+"4011 New Pneumatic Tires, Of Rubber";"Tunisia";"2025";"33,309"
+"4011 New Pneumatic Tires, Of Rubber";"Turkey";"2025";"72,199,546"
+"4011 New Pneumatic Tires, Of Rubber";"Ukraine";"2025";"3,097,427"
+"4011 New Pneumatic Tires, Of Rubber";"United Arab Emirates";"2025";"65,125"
+"4011 New Pneumatic Tires, Of Rubber";"United Kingdom";"2025";"61,338,317"
+"4011 New Pneumatic Tires, Of Rubber";"Vietnam";"2025";"1,424,584,728"
