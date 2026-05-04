@@ -3,9 +3,13 @@
 library(ggplot2)
 library(dplyr)
 library(here)
+library(tidyverse)
+library(readr)
+
 # use "here" library because we used git and colleges r studio had problem with paths.
 introduction = here("data","introduction")
 comparision= here("data","comparision")
+image=here("images")
 
 
 #Load Data for tire industry
@@ -37,7 +41,7 @@ ggplot(industrial_production, aes(x = observation_date, y = IPG326S)) +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
-ggsave(file.path(introduction, "timeseries_productionvolume.png"))
+ggsave(file.path(image, "timeseries_productionvolume.png"))
 
 #time series graph for production volumes growth rates
 ggplot(industrial_production, aes(x = observation_date, y = IPG326S_CH1)) +
@@ -50,9 +54,9 @@ ggplot(industrial_production, aes(x = observation_date, y = IPG326S_CH1)) +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
-ggsave(file.path(introduction, "timeseries_growthrates.png"))
+ggsave(file.path(image, "timeseries_growthrates.png"))
 
-#median, mean, max, min for growth rates
+#median, mean, max, min for growth rates and removal of Not number
 print(median(industrial_production$IPG326S_CH1, na.rm = TRUE))
 print(mean(industrial_production$IPG326S_CH1, na.rm = TRUE))
 max_growth <- industrial_production[which.max(industrial_production$IPG326S_CH1), ]
@@ -60,7 +64,7 @@ min_growth <- industrial_production[which.min(industrial_production$IPG326S_CH1)
 print(max_growth)
 print(min_growth)
 
-#standard deviation
+#standard deviation and removal of Not number
 sd_industrialproduction_volumes <- sd(industrial_production$IPG326S, na.rm = TRUE)
 print(sd_industrialproduction_volumes)
 sd_industrialproduction_growth <- sd(industrial_production$IPG326S_CH1, na.rm = TRUE)
@@ -68,7 +72,7 @@ print(sd_industrialproduction_growth)
 
 #boxplot for growth rates
 ggplot(data = industrial_production, aes(x = IPG326S_CH1)) +
-  geom_boxplot()
+geom_boxplot()
 
 #finding outliers using zscore
 industrial_production$growth_zscore <- (industrial_production$IPG326S_CH1 - mean(industrial_production$IPG326S_CH1, na.rm = TRUE))/sd(industrial_production$IPG326S_CH1, na.rm=TRUE)
@@ -95,7 +99,7 @@ ggplot(wits_data,aes(x = Quantity)) +
   ggtitle('histogram of volumes of exports') +
   labs(x = 'Quantity') +
   geom_histogram()
-ggsave(file.path(introduction, "histogramofvolumesofexports.png"))
+ggsave(file.path(image, "histogramofvolumesofexports.png"))
 
 #log export histogram
 ggplot(wits_data,aes(x = Quantity)) +
@@ -103,7 +107,7 @@ ggplot(wits_data,aes(x = Quantity)) +
   labs(x = 'Quantity') +
   scale_x_log10() +
   geom_histogram()
-ggsave(file.path(introduction, "loghistogramofexports.png"))
+ggsave(file.path(image, "loghistogramofexports.png"))
 
 #comparing top_20 exporters $$$ here was 10 before
 top_20_value <- wits_data %>%
@@ -112,10 +116,11 @@ top_20_value <- wits_data %>%
 ggplot(top_20_value, aes(x = reorder(Reporter, `Trade.Value.1000USD`), y = `Trade.Value.1000USD`, fill = Reporter == 'United States')) +
   geom_bar(stat = 'identity', show.legend = FALSE) +
   theme_minimal() +
-  labs(title = 'Top 20 Tire Exporters in 2024',
+  labs(title = 'Top 20 Tire Exporters in 2025',
        x = 'Country',
        y = 'Trade Value in 1000 USD') +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ggsave(file.path(image, "histogram-of-exporters.png"))
 
 #export data in 2020
 wits_data2020 <- read.csv(file.path(introduction,"WITS-By-HS6Product(4)(By-HS6Product).csv"),sep = ';', stringsAsFactors = FALSE) #$$$ doesnt exist
@@ -150,7 +155,6 @@ ggplot(top_10_value2014, aes(x = reorder(Reporter, `Trade.Value.1000USD`), y = `
 
 #labor stats
 #cleaning of the dataset + I will comment on that later
-library(readr)
 df <- read_delim('rubber-workers-data.csv', delim = ';', na = 'N.A.', show_col_types = FALSE)
 target_measures <- c(
   'Unit labor costs', 'Capital share', 'Capital costs', 'Intermediate inputs share', 'Intermediate inputs costs', 'Employment', 'Real sectoral output', 'Output per worker')
@@ -160,9 +164,10 @@ clean_df <- df %>%
     Sector, NAICS, Industry, Digit, Basis, Measure, Units,
     all_of(as.character(2000:2024))
   )
-write_csv(clean_df, 'cleaned_rubber_data_2000_2024.csv')
+write_csv(clean_df, file.path(introduction, "cleaned_rubber_data_2000_2024.csv"))
 head(clean_df)
-library(tidyverse)
+
+
 long_df <- clean_df %>%
   pivot_longer(
     cols = `2000`:`2024`,        
@@ -174,6 +179,7 @@ long_df <- clean_df %>%
     Value = as.numeric(Value)   
   )
 #filtering data for real sectoral output
+
 df_labour <- long_df %>%
   filter(
     Measure == 'Real sectoral output',
@@ -203,6 +209,8 @@ ggplot(df_output_per_worker, aes(x = Year, y = Value)) +
     x = 'Year',
     y = 'Percentage Change'
   )
+
+
 #filtering data for labor costs
 df_unit_labor_costs <- long_df %>%
   filter(
