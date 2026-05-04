@@ -240,7 +240,7 @@ ggplot(df_triple_labour, aes(x = Year, y = Value, color = Measure)) +
   )
 
 #import to the us
-df_import_to_us <- read.csv("WITS-By-HS6Product(By-HS6Product) - Copy.csv", sep = ";", skip = 3, stringsAsFactors = FALSE)
+df_import_to_us <- read.csv("WITS-By-HS6Product(By-HS6Product).csv", sep = ";", skip = 3, stringsAsFactors = FALSE)
 df_import_to_us_c <- df_import_to_us[, 1:4]
 df_import_to_us_c[[4]] <- as.numeric(gsub(",", "", df_import_to_us[[4]]))
 colnames(df_import_to_us_c) <- c("Commodity", "Country", "Year", "Value")
