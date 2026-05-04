@@ -6,9 +6,11 @@ library(here)
 library(tidyverse)
 library(readr)
 
-# use "here" library because we used git and colleges r studio had problem with paths.
+# USE these variables to specify paths where to save.
 introduction = here("data","introduction")
 comparision= here("data","comparision")
+correlation= here("data","correlation")
+
 image=here("images")
 
 
@@ -29,7 +31,6 @@ print(max_growthTI)
 print(min_growthTI)
 
 
-correlation="./data/correlation"
 #time series graph for production volumes
 ggplot(industrial_production, aes(x = observation_date, y = IPG326S)) +
   geom_line() +
@@ -155,7 +156,99 @@ ggplot(top_10_value2014, aes(x = reorder(Reporter, `Trade.Value.1000USD`), y = `
 
 #labor stats
 #cleaning of the dataset + I will comment on that later
-df <- read_delim('rubber-workers-data.csv', delim = ';', na = 'N.A.', show_col_types = FALSE)
+# 1. Load and subset
+rubberWorkers = read.csv(file.path(introduction,'rubber-workers-data.csv'), sep = ';', na.strings = "N.A.", check.names = FALSE)
+cleanedRubberWorkers = rubberWorkers[, -(1:5)]
+
+# 2. Reshape to LONG
+cleanedRubberWorkers = reshape(
+  cleanedRubberWorkers, 
+  direction = "long", 
+  varying   = names(cleanedRubberWorkers)[3:ncol(cleanedRubberWorkers)],
+  times     = names(cleanedRubberWorkers)[3:ncol(cleanedRubberWorkers)],
+  v.names   = "Value", 
+  timevar   = "Year", 
+  idvar     = c("Measure", "Units")
+)
+
+# 3. Create combined name
+cleanedRubberWorkers$Measure_Units <- paste0(cleanedRubberWorkers$Measure, "-", cleanedRubberWorkers$Units)
+
+# 4. Reshape to WIDE
+cleanedRubberWorkers <- reshape(
+  cleanedRubberWorkers, 
+  direction = "wide", 
+  idvar     = "Year", 
+  timevar   = "Measure_Units",
+  drop      = c("Measure", "Units")
+)
+
+# --- THE FIX STARTS HERE ---
+# This searches for "Value." in the names and replaces it with nothing ""
+names(cleanedRubberWorkers) <- gsub("Value.", "", names(cleanedRubberWorkers))
+# --- THE FIX ENDS HERE ---
+
+# 5. Set Year as index (Note: Fixed typo from 'year' to 'Year')
+rownames(cleanedRubberWorkers) = cleanedRubberWorkers$Year
+
+head(cleanedRubberWorkers)
+# Find column indices that contain "Millions"
+million_cols <- grep("Millions", names(cleanedRubberWorkers))
+
+# Create the new dataframe including the Year column
+profitability <- cleanedRubberWorkers[, c("Year", names(cleanedRubberWorkers)[million_cols])]
+
+# Clean the data: Remove commas and convert to numeric
+# (R can't plot "20,324.6" if it's stored as text)
+for(i in 2:ncol(profitability)) {
+  profitability[, i] <- as.numeric(gsub(",", "", profitability[, i]))
+}
+library(ggplot2)
+
+# Ensure Year is numeric for the x-axis
+profitability$Year_Num <- as.numeric(as.character(profitability$Year))
+
+# Create the plot by adding layers manually
+# Note: I am using the exact column names from your grep result
+ggplot(data = profitability, aes(x = Year_Num)) +
+  # 1. Revenue (The Top Line)
+  geom_line(aes(y = `Sectoral output-Millions of current dollars`, color = "Revenue"), size = 1.2) +
+  geom_point(aes(y = `Sectoral output-Millions of current dollars`, color = "Revenue")) +
+  
+  # 2. Total Cost
+  geom_line(aes(y = `Combined inputs costs-Millions of current dollars`, color = "Total Cost"), size = 1.2) +
+  geom_point(aes(y = `Combined inputs costs-Millions of current dollars`, color = "Total Cost")) +
+  
+  # 3. Labor (Component)
+  geom_line(aes(y = `Labor compensation-Millions of current dollars`, color = "Labor"), linetype = "dashed") +
+  
+  # 4. Intermediate Inputs (Component)
+  geom_line(aes(y = `Intermediate inputs costs-Millions of current dollars`, color = "Intermediate"), linetype = "dashed") +
+  
+  # 5. Capital (Component)
+  geom_line(aes(y = `Capital costs-Millions of current dollars`, color = "Capital"), linetype = "dashed") +
+  
+  # Formatting
+  scale_color_manual(values = c(
+    "Revenue" = "darkgreen", 
+    "Total Cost" = "red", 
+    "Labor" = "blue", 
+    "Intermediate" = "orange", 
+    "Capital" = "grey40"
+  )) +
+  labs(
+    title = "Tire Industry: Revenue vs. Costs (Millions)",
+    subtitle = "Struggle Analysis: The narrowing gap between Green (Revenue) and Red (Total Cost)",
+    x = "Year",
+    y = "Millions of USD",
+    color = "Financial Category"
+  ) +
+  theme_minimal()
+
+#############################
+#############################
+#############################
+
 target_measures <- c(
   'Unit labor costs', 'Capital share', 'Capital costs', 'Intermediate inputs share', 'Intermediate inputs costs', 'Employment', 'Real sectoral output', 'Output per worker')
 clean_df <- df %>%
@@ -238,3 +331,15 @@ ggplot(df_triple_labour, aes(x = Year, y = Value, color = Measure)) +
     x = 'Year',
     y = 'Percentage Change'
   )
+
+######################################################################
+######################################################################
+######################################################################
+######################################################################
+######################################################################
+#!Correlation part
+rm(list=ls())
+valueOfImports=read.csv(file.path(correlation,"import-census-4011.csv"), sep = ";", skip=3, header=true )
+
+
+
