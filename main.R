@@ -250,9 +250,11 @@ print(df_import_to_us_c)
 ggplot(df_import_to_us_c, aes(x = Value)) +
   geom_histogram() +
   theme_minimal()
+ggsave(file.path(image, "histogram-of-importers.png"))
 
 #log histogram
 ggplot(df_import_to_us_c,aes(x = Value)) +
   scale_x_log10() +
   theme_minimal() +
   geom_histogram()
+ggsave(file.path(image, "loghistogram-of-importers.png"))
