@@ -337,9 +337,40 @@ ggplot(df_triple_labour, aes(x = Year, y = Value, color = Measure)) +
 ######################################################################
 ######################################################################
 ######################################################################
+#Comparision part
+
+#import to the us
+df_import_to_us <- read.csv("WITS-By-HS6Product(By-HS6Product).csv", sep = ";", skip = 3, stringsAsFactors = FALSE)
+df_import_to_us_c <- df_import_to_us[, 1:4]
+df_import_to_us_c[[4]] <- as.numeric(gsub(",", "", df_import_to_us[[4]]))
+colnames(df_import_to_us_c) <- c("Commodity", "Country", "Year", "Value")
+print(df_import_to_us_c)
+#max,min, mean, median
+max_import <- df_import_to_us_c[which.max(df_import_to_us_c$Value), ]
+min_import <- df_import_to_us_c[which.min(df_import_to_us_c$Value), ]
+print(max_import)
+print(min_import)
+#histogram 
+ggplot(df_import_to_us_c, aes(x = Value)) +
+  geom_histogram() +
+  theme_minimal()
+ggsave(file.path(image, "histogram-of-importers.png"))
+
+#log histogram
+ggplot(df_import_to_us_c,aes(x = Value)) +
+  scale_x_log10() +
+  theme_minimal() +
+  geom_histogram()
+ggsave(file.path(image, "loghistogram-of-importers.png"))
+
+
+
+######################################################################
+######################################################################
+######################################################################
+######################################################################
+######################################################################
+
 #!Correlation part
-rm(list=ls())
 valueOfImports=read.csv(file.path(correlation,"import-census-4011.csv"), sep = ";", skip=3, header=true )
-
-
 
