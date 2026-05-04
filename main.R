@@ -245,7 +245,11 @@ df_import_to_us_c <- df_import_to_us[, 1:4]
 df_import_to_us_c[[4]] <- as.numeric(gsub(",", "", df_import_to_us[[4]]))
 colnames(df_import_to_us_c) <- c("Commodity", "Country", "Year", "Value")
 print(df_import_to_us_c)
-
+#max,min, mean, median
+max_import <- df_import_to_us_c[which.max(df_import_to_us_c$Value), ]
+min_import <- df_import_to_us_c[which.min(df_import_to_us_c$Value), ]
+print(max_import)
+print(min_import)
 #histogram 
 ggplot(df_import_to_us_c, aes(x = Value)) +
   geom_histogram() +
