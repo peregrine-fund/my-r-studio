@@ -238,3 +238,21 @@ ggplot(df_triple_labour, aes(x = Year, y = Value, color = Measure)) +
     x = 'Year',
     y = 'Percentage Change'
   )
+
+#import to the us
+df_import_to_us <- read.csv("WITS-By-HS6Product(By-HS6Product) - Copy.csv", sep = ";", skip = 3, stringsAsFactors = FALSE)
+df_import_to_us_c <- df_import_to_us[, 1:4]
+df_import_to_us_c[[4]] <- as.numeric(gsub(",", "", df_import_to_us[[4]]))
+colnames(df_import_to_us_c) <- c("Commodity", "Country", "Year", "Value")
+print(df_import_to_us_c)
+
+#histogram 
+ggplot(df_import_to_us_c, aes(x = Value)) +
+  geom_histogram() +
+  theme_minimal()
+
+#log histogram
+ggplot(df_import_to_us_c,aes(x = Value)) +
+  scale_x_log10() +
+  theme_minimal() +
+  geom_histogram()
