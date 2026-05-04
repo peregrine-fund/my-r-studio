@@ -7,7 +7,7 @@ Census import category for tires ( 4011 based on hs ) is different than fred (30
 Do scatter plot of the price changes ( census import price vs ppi fred). Please add comments to R-studio and try to make variables so when changing some parts of the code it will be easy. Save chartes via code ( like ggplot save). Use varaible comparision as path to save.
 
 ## LUKAS
-
+Lukasi data byly procistene automaticky co jsem tam pridal s temi importy. Kdyztak napis kdyby neco nebylo nesedelo. A prosim zachovavej raw data. jestli chces na nich filtrovat tak vytvor novy csv
 <!--for labor.csv maybe look at unit labor cost, how much is capital how much intermediate-->
 ---
 ## Jacob Notes
