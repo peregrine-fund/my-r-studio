@@ -332,12 +332,6 @@ ggplot(df_triple_labour, aes(x = Year, y = Value, color = Measure)) +
     y = 'Percentage Change'
   )
 
-######################################################################
-######################################################################
-######################################################################
-######################################################################
-######################################################################
-#Comparision part
 
 #import to the us
 df_import_to_us <- read.csv("WITS-By-HS6Product(By-HS6Product).csv", sep = ";", skip = 3, stringsAsFactors = FALSE)
@@ -364,6 +358,14 @@ ggplot(df_import_to_us_c,aes(x = Value)) +
 ggsave(file.path(image, "loghistogram-of-importers.png"))
 
 
+######################################################################
+######################################################################
+######################################################################
+######################################################################
+######################################################################
+#Comparision part
+
+
 
 ######################################################################
 ######################################################################
@@ -372,5 +374,59 @@ ggsave(file.path(image, "loghistogram-of-importers.png"))
 ######################################################################
 
 #!Correlation part
-valueOfImports=read.csv(file.path(correlation,"import-census-4011.csv"), sep = ";", skip=3, header=true )
+
+
+
+#Already defined but wanted to redefined it for easier work- correlation part can be executed autonomously 
+library(tidyverse)
+correlation <- here("data", "correlation")
+
+#NOW LOADING DATA FROM ./data/correlation and merging dataframes together and filtering redundant data,
+valueOfImports = read.csv(
+  file = file.path(correlation, "import-census-4011.csv"), 
+  sep = ";", 
+  skip = 3, 
+  header = TRUE
+)
+
+ppiPrices=read.csv(
+  file = file.path(correlation, "PPI-&-Import-prices.csv"), 
+  sep = ",", 
+  
+  header = TRUE
+)
+
+summary(ppiPrices)
+print(ppiPrices$observation_date)
+print(valueOfImports$Time)
+
+
+monthly_imports <- valueOfImports %>%
+  filter(str_detect(Time, " ") & !str_detect(Time, "through")) %>%
+  
+  select(Time, ImportCifValue= 6)%>% 
+  mutate(
+    ImportCifValue = as.numeric(gsub(",", "", ImportCifValue)),
+    Date = as.Date(paste("01", Time), format = "%d %b %Y")) %>%
+  select(Date, ImportCifValue)
+summary(ppiPrices)
+
+ppi_clean <- ppiPrices %>%
+  mutate(
+    Date = as.Date(observation_date),
+    PPI = PCU3262132621 
+  ) %>%
+  select(Date, PPI)
+
+# THIS DF BELLOW WILL BE USED MAINLY TO SEE CORRELATION
+correlationDf <- inner_join(monthly_imports, ppi_clean, by = "Date")
+
+view(correlationDf)
+
+#main work ( chart and descriptive stats):
+scatter.smooth(correlationDf$ImportCifValue,correlationDf$PPI)
+# 0.94 - really high correlation! 
+cor(correlationDf$ImportCifValue,correlationDf$PPI)
+
+summary(correlationDf)
 
