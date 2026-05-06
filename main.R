@@ -439,13 +439,14 @@ ppi_clean <- ppiPrices %>%
     PPI = PCU3262132621 
   ) %>%
   select(Date, PPI)
+#IPI stands for  import price index
 ipi_clean <- ppiPrices %>%
   mutate(
     Date = as.Date(observation_date),
     IPI = IZ32621 
   ) %>%
   select(Date, IPI)
-
+view(ipi_clean)
 
 
 # THIS DF BELLOW WILL BE USED MAINLY TO SEE CORRELATION
@@ -458,24 +459,27 @@ correlationDf <- inner_join(imports_clean,ppi_clean, by = "Date") %>%
     Import_ind = (ImportCifValue / ImportCifValue[1]) * 100,
     PPI_change =(PPI - lag(PPI)) / lag(PPI),
     IMPORT_change =(ImportCifValue - lag(ImportCifValue/IPI)) / lag(ImportCifValue/IPI)
+    
   )
 
 #view(correlationDf)
 
 #main work ( chart and descriptive stats):
 
-# 0.94 - really high correlation! 
+# 0.94 - really high correlation! Because increase in prices of pneumatics is all over the world - CIF value ( quanity * prices ) will also increase
 cor(correlationDf$ImportCifValue,correlationDf$PPI)
-#Why NAN
+#
 cor(correlationDf$IMPORT_change, correlationDf$PPI_ind, use = "complete.obs")
 summary(correlationDf)
 
 
 
-
+print(ipi_clean$IPI_ind)
 ggplot(data=correlationDf, aes(x = Date)) +
   geom_line(aes(y = PPI_ind, color = "PPI")) +
   geom_line(aes(y = Import_ind, color = "Import Value")) +
+  geom_line(aes(y = IPI_ind, color = "Import price index Value")) +
+  
   scale_x_date(
     date_breaks = '3 years',
     date_labels = '%Y'
@@ -497,3 +501,4 @@ ggplot(correlationDf, aes(x = PPI_change, y = IMPORT_change)) +
     fill = "Frequency"
   ) +
   theme_minimal()
+
