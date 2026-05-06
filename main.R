@@ -364,9 +364,32 @@ ggsave(file.path(image, "loghistogram-of-importers.png"))
 ######################################################################
 ######################################################################
 ######################################################################
-#Comparision part
+#Comparison part
 
 
+
+#removing data pre-2000 and one year summary values
+ppiPrices2000s = ppiPrices[-c(1:313),]
+valueOfImportsMonths = valueOfImports[-c(1:11),]
+valueOfImportsMonths = valueOfImportsMonths %>%
+  filter(row_number() %% 13 != 0)
+
+#unifying time period
+PPIValueMerger = ppiPrices[-c(1:337),]
+PPIValueMerger = PPIValueMerger[-c(291),]
+PPIValueMerger = PPIValueMerger %>%
+  bind_cols(valueOfImportsMonths %>% select(CIF.Value..Gen....US.)) %>%
+  mutate(CIF.Value..Gen....US. = as.numeric(str_remove_all(`CIF.Value..Gen....US.`, "[,$]")) / 1e6
+  )
+
+ggplot(data = ppiPrices2000s,aes(x=IZ32621,y=PCU3262132621)) +
+  geom_point(size=1,color=1) +
+  geom_smooth()+
+  geom_abline(slope = 1)
+
+ggplot(data=PPIValueMerger, aes(x=IZ32621,y=CIF.Value..Gen....US.)) + 
+  geom_point(size=1,color=1)+
+  geom_smooth()
 
 ######################################################################
 ######################################################################
@@ -376,10 +399,8 @@ ggsave(file.path(image, "loghistogram-of-importers.png"))
 
 #!Correlation part
 
-
-
-#Already defined but wanted to redefined it for easier work- correlation part can be executed autonomously 
 library(tidyverse)
+rm(list=ls())
 correlation <- here("data", "correlation")
 
 #NOW LOADING DATA FROM ./data/correlation and merging dataframes together and filtering redundant data,
@@ -402,7 +423,7 @@ print(ppiPrices$observation_date)
 print(valueOfImports$Time)
 
 
-monthly_imports <- valueOfImports %>%
+imports_clean <- valueOfImports %>%
   filter(str_detect(Time, " ") & !str_detect(Time, "through")) %>%
   
   select(Time, ImportCifValue= 6)%>% 
@@ -418,40 +439,61 @@ ppi_clean <- ppiPrices %>%
     PPI = PCU3262132621 
   ) %>%
   select(Date, PPI)
+ipi_clean <- ppiPrices %>%
+  mutate(
+    Date = as.Date(observation_date),
+    IPI = IZ32621 
+  ) %>%
+  select(Date, IPI)
+
+
 
 # THIS DF BELLOW WILL BE USED MAINLY TO SEE CORRELATION
-correlationDf <- inner_join(monthly_imports, ppi_clean, by = "Date")
+# ALSO ADDED INDEXES STARTING AT FIRST VALUE AND % CHANGES
+correlationDf <- inner_join(imports_clean,ppi_clean, by = "Date") %>%
+  inner_join(ipi_clean, by = "Date") %>%
+  mutate(
+    PPI_ind = (PPI / PPI[1]) * 100,
+    IPI_ind=(IPI/IPI[1])*100,
+    Import_ind = (ImportCifValue / ImportCifValue[1]) * 100,
+    PPI_change =(PPI - lag(PPI)) / lag(PPI),
+    IMPORT_change =(ImportCifValue - lag(ImportCifValue/IPI)) / lag(ImportCifValue/IPI)
+  )
 
-view(correlationDf)
+#view(correlationDf)
 
 #main work ( chart and descriptive stats):
-scatter.smooth(correlationDf$ImportCifValue,correlationDf$PPI)
+
 # 0.94 - really high correlation! 
 cor(correlationDf$ImportCifValue,correlationDf$PPI)
-
+#Why NAN
+cor(correlationDf$IMPORT_change, correlationDf$PPI_ind, use = "complete.obs")
 summary(correlationDf)
 
 
 
-#removing data pre-2000 and one year summary values
-ppiPrices2000s = ppiPrices[-c(1:313),]
-valueOfImportsMonths = valueOfImports[-c(1:11),]
-valueOfImportsMonths = valueOfImportsMonths %>%
-  filter(row_number() %% 13 != 0)
 
-#unifying time period
-PPIValueMerger = ppiPrices[-c(1:337),]
-PPIValueMerger = PPIValueMerger[-c(291),]
-PPIValueMerger = PPIValueMerger %>%
-  bind_cols(valueOfImportsMonths %>% select(CIF.Value..Gen....US.)) %>%
-  mutate(CIF.Value..Gen....US. = as.numeric(str_remove_all(`CIF.Value..Gen....US.`, "[,$]")) / 1e6
+ggplot(data=correlationDf, aes(x = Date)) +
+  geom_line(aes(y = PPI_ind, color = "PPI")) +
+  geom_line(aes(y = Import_ind, color = "Import Value")) +
+  scale_x_date(
+    date_breaks = '3 years',
+    date_labels = '%Y'
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
   )
+scatter.smooth(correlationDf$IMPORT_change,correlationDf$PPI_ind)
 
-ggplot(data = ppiPrices2000s,aes(x=IZ32621,y=PCU3262132621)) +
-  geom_point(size=1,color=1) +
-  geom_smooth()+
-  geom_abline(slope = 1)
- 
-ggplot(data=PPIValueMerger, aes(x=IZ32621,y=CIF.Value..Gen....US.)) + 
-  geom_point(size=1,color=1)+
-  geom_smooth()
+ggplot(correlationDf, aes(x = PPI_change, y = IMPORT_change)) +
+  # This creates the "3D" effect using color density
+  geom_bin2d(bins = 30) + 
+  scale_fill_viridis_c() + # A nice color scale for density
+  labs(
+    title = "Density of Monthly % Changes",
+    x = "PPI % Change",
+    y = "Import Value % Change",
+    fill = "Frequency"
+  ) +
+  theme_minimal()
