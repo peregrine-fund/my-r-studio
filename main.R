@@ -5,6 +5,7 @@ library(dplyr)
 library(here)
 library(tidyverse)
 library(readr)
+library(stringr)
 
 # USE these variables to specify paths where to save.
 introduction = here("data","introduction")
@@ -430,3 +431,27 @@ cor(correlationDf$ImportCifValue,correlationDf$PPI)
 
 summary(correlationDf)
 
+
+
+#removing data pre-2000 and one year summary values
+ppiPrices2000s = ppiPrices[-c(1:313),]
+valueOfImportsMonths = valueOfImports[-c(1:11),]
+valueOfImportsMonths = valueOfImportsMonths %>%
+  filter(row_number() %% 13 != 0)
+
+#unifying time period
+PPIValueMerger = ppiPrices[-c(1:337),]
+PPIValueMerger = PPIValueMerger[-c(291),]
+PPIValueMerger = PPIValueMerger %>%
+  bind_cols(valueOfImportsMonths %>% select(CIF.Value..Gen....US.)) %>%
+  mutate(CIF.Value..Gen....US. = as.numeric(str_remove_all(`CIF.Value..Gen....US.`, "[,$]")) / 1e6
+  )
+
+ggplot(data = ppiPrices2000s,aes(x=IZ32621,y=PCU3262132621)) +
+  geom_point(size=1,color=1) +
+  geom_smooth()+
+  geom_abline(slope = 1)
+ 
+ggplot(data=PPIValueMerger, aes(x=IZ32621,y=CIF.Value..Gen....US.)) + 
+  geom_point(size=1,color=1)+
+  geom_smooth()
