@@ -448,14 +448,15 @@ ipi_clean <- ppiPrices %>%
   select(Date, IPI)
 view(ipi_clean)
 
-
+startingIndex=48
 # THIS DF BELLOW WILL BE USED MAINLY TO SEE CORRELATION
 # ALSO ADDED INDEXES STARTING AT FIRST VALUE AND % CHANGES
 correlationDf <- inner_join(imports_clean,ppi_clean, by = "Date") %>%
   inner_join(ipi_clean, by = "Date") %>%
   mutate(
-    PPI_ind = (PPI / PPI[1]) * 100,
-    IPI_ind=(IPI/IPI[1])*100,
+    PPI_ind = (PPI / PPI[startingIndex]) * 100,
+    IPI_ind=(IPI/IPI[startingIndex])*100,
+    price_ratio=PPI_ind/IPI_ind,
     Import_ind = (ImportCifValue / ImportCifValue[1]) * 100,
     PPI_change =(PPI - lag(PPI)) / lag(PPI),
     IMPORT_change =(ImportCifValue - lag(ImportCifValue/IPI)) / lag(ImportCifValue/IPI)
@@ -470,9 +471,11 @@ correlationDf <- inner_join(imports_clean,ppi_clean, by = "Date") %>%
 cor(correlationDf$ImportCifValue,correlationDf$PPI)
 #
 cor(correlationDf$IMPORT_change, correlationDf$PPI_ind, use = "complete.obs")
+cor(correlationDf$ImportCifValue, correlationDf$price_ratio, use = "complete.obs")
+
 summary(correlationDf)
 
-
+scatter.smooth(correlationDf$price_ratio, correlationDf$ImportCifValue)
 
 print(ipi_clean$IPI_ind)
 ggplot(data=correlationDf, aes(x = Date)) +
@@ -488,8 +491,15 @@ ggplot(data=correlationDf, aes(x = Date)) +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
-scatter.smooth(correlationDf$IMPORT_change,correlationDf$PPI_ind)
-
+ggplot(correlationDf, aes(x = PPI_ind / IPI_ind, y = ImportCifValue)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "loess", color = "red") + 
+  theme_minimal() +
+  labs(
+    title = "Impact of Domestic vs. Import Price Ratio on Import Volume",
+    x = "Relative Price Index (PPI / IPI)",
+    y = "Import CIF Value"
+  )
 ggplot(correlationDf, aes(x = PPI_change, y = IMPORT_change)) +
   # This creates the "3D" effect using color density
   geom_bin2d(bins = 30) + 
@@ -497,8 +507,9 @@ ggplot(correlationDf, aes(x = PPI_change, y = IMPORT_change)) +
   labs(
     title = "Density of Monthly % Changes",
     x = "PPI % Change",
-    y = "Import Value % Change",
+    y = "Import Value % Change",z
     fill = "Frequency"
   ) +
   theme_minimal()
+
 
