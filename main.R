@@ -368,8 +368,28 @@ ggsave(file.path(image, "loghistogram-of-importers.png"))
 
 
 
+ppiPrices=read.csv( 
+  file = file.path(comparision, "PPI-&-Import-prices.csv"), 
+  sep = ",", 
+  header = TRUE
+)
+valueOfImports = read.csv(
+  file = file.path(comparision, "import-census-4011.csv"), 
+  sep = ";", 
+  skip = 3, 
+  header = TRUE,
+)
+
+ImportVolumes =read.csv(
+  file = file.path(comparision, "usitc.csv"), 
+  sep = ";", 
+  header = TRUE,
+)
+
+
+
 #removing data pre-2000 and one year summary values
-ppiPrices2000s = ppiPrices[-c(1:313),]
+ppiPrices2000 = ppiPrices[-c(1:313),]
 valueOfImportsMonths = valueOfImports[-c(1:11),]
 valueOfImportsMonths = valueOfImportsMonths %>%
   filter(row_number() %% 13 != 0)
@@ -382,14 +402,41 @@ PPIValueMerger = PPIValueMerger %>%
   mutate(CIF.Value..Gen....US. = as.numeric(str_remove_all(`CIF.Value..Gen....US.`, "[,$]")) / 1e6
   )
 
-ggplot(data = ppiPrices2000s,aes(x=IZ32621,y=PCU3262132621)) +
-  geom_point(size=1,color=1) +
-  geom_smooth()+
-  geom_abline(slope = 1)
+ppiPrices2000r = remove_missing(ppiPrices2000)
+indeXPCU = ppiPrices2000r$PCU3262132621 [c(1)]
+indeXIZ =  ppiPrices2000r$IZ32621 [c(1)]
 
-ggplot(data=PPIValueMerger, aes(x=IZ32621,y=CIF.Value..Gen....US.)) + 
-  geom_point(size=1,color=1)+
-  geom_smooth()
+ppiPrices2000r$PCU3262132621=ppiPrices2000r$PCU3262132621 /(indeXPCU*0.01)
+ppiPrices2000r$IZ32621 = ppiPrices2000r$IZ32621/(indeXIZ*0.01)
+
+
+
+#scatter plot graph
+ggplot(data = ppiPrices2000r,aes(x=IZ32621,y=PCU3262132621)) +
+  geom_point(size=1,color=1) +
+  geom_smooth(method = 'lm')
+ggsave(file.path(image, "PcuIzCorellation.png"))
+
+
+#filtering data and sorting data
+ImportVolumesSort = ImportVolumes[-c(1:11),]
+ImportVolumesSort = ImportVolumesSort %>%
+  filter(Year>1999)
+ImportVolumesSort = ImportVolumesSort[c(0:315),]
+ImportVolumesSort <- ImportVolumesSort %>%
+  mutate(
+    Year = as.numeric(Year),
+    Month = as.numeric(Month)
+  )
+ImportVolumesSort = sort_by(ImportVolumesSort, ~ Year + Month)
+
+ppiPrices2000 = ppiPrices2000%>%
+  bind_cols(ImportVolumesSort %>% select(General.First.Unit.of.Quantity))
+ppiPrices2000 = remove_missing(ppiPrices2000)
+
+
+cor(ppiPrices2000r$IZ32621,ppiPrices2000r$PCU3262132621,use = 'complete.obs')
+
 
 ######################################################################
 ######################################################################
