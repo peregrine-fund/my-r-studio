@@ -34,7 +34,7 @@ print(min_growthTI)
 
 #time series graph for production volumes
 ggplot(industrial_production, aes(x = observation_date, y = IPG326S)) +
-  geom_line() +
+  geom_line(size = 1.2) +
   scale_x_date(
     date_breaks = '3 years',
     date_labels = '%Y'
@@ -47,7 +47,7 @@ ggsave(file.path(image, "timeseries_productionvolume.png"))
 
 #time series graph for production volumes growth rates
 ggplot(industrial_production, aes(x = observation_date, y = IPG326S_CH1)) +
-  geom_line() +
+  geom_line(size = 1.2) +
   scale_x_date(
     date_breaks = "3 years",
     date_labels = "%Y"
