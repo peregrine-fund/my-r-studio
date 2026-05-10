@@ -379,8 +379,11 @@ ppiPrices2000 = ppiPrices2000%>%
   bind_cols(ImportVolumesSort %>% select(General.First.Unit.of.Quantity))
 ppiPrices2000 = ppiPrices2000%>%
   bind_cols(GeneralCif %>% select(General_Cif_Imports_value))
-ppiPrices2000 = remove_missing(ppiPrices2000)
+ppiPrices2000 = remove_missing(ppiPrices2000) %>%
+mutate(hsPrice = General_Cif_Imports_value / General.First.Unit.of.Quantity)
 
+
+write_csv(ppiPrices2000, file.path(comparision, "complete_df.csv"))
 
 cor(ppiPrices2000r$IZ32621,ppiPrices2000r$PCU3262132621,use = 'complete.obs')
 
