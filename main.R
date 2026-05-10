@@ -359,9 +359,26 @@ ImportVolumesSort <- ImportVolumesSort %>%
     Month = as.numeric(Month)
   )
 ImportVolumesSort = sort_by(ImportVolumesSort, ~ Year + Month)
+write_csv(ImportVolumesSort, file.path(comparision, "ImportVolumesSort.csv"))
+
+
+GeneralCif = ImportVolumes[c(906:1353),]
+GeneralCif = GeneralCif %>%
+  filter(Year>1999)
+GeneralCif = GeneralCif[-1,]
+GeneralCif = GeneralCif %>%
+  rename(General_Cif_Imports_value = General.First.Unit.of.Quantity)
+GeneralCif <- GeneralCif %>%
+  mutate(
+    Year = as.numeric(Year),
+    Month = as.numeric(Month)
+  )
+GeneralCif = sort_by(GeneralCif, ~ Year + Month)
 
 ppiPrices2000 = ppiPrices2000%>%
   bind_cols(ImportVolumesSort %>% select(General.First.Unit.of.Quantity))
+ppiPrices2000 = ppiPrices2000%>%
+  bind_cols(GeneralCif %>% select(General_Cif_Imports_value))
 ppiPrices2000 = remove_missing(ppiPrices2000)
 
 
