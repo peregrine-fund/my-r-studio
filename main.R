@@ -379,6 +379,11 @@ ppiPrices2000 = ppiPrices2000%>%
   bind_cols(ImportVolumesSort %>% select(General.First.Unit.of.Quantity))
 ppiPrices2000 = ppiPrices2000%>%
   bind_cols(GeneralCif %>% select(General_Cif_Imports_value))
+ppiPrices2000 = ppiPrices2000 %>%
+  mutate(
+    General.First.Unit.of.Quantity = as.numeric(General.First.Unit.of.Quantity),
+    General_Cif_Imports_value = as.numeric(General_Cif_Imports_value)
+  )
 ppiPrices2000 = remove_missing(ppiPrices2000) %>%
 mutate(hsPrice = General_Cif_Imports_value / General.First.Unit.of.Quantity)
 
