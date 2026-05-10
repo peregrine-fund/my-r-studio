@@ -377,7 +377,7 @@ cor(ppiPrices2000r$IZ32621,ppiPrices2000r$PCU3262132621,use = 'complete.obs')
 #!Correlation part
 
 library(tidyverse)
-rm(list=ls())
+#rm(list=ls())
 correlation <- here("data", "correlation")
 
 #NOW LOADING DATA FROM ./data/correlation and merging dataframes together and filtering redundant data,
