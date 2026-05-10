@@ -412,10 +412,14 @@ valueOfImports = read.csv(
   skip = 3, 
   header = TRUE
 )
-
+hello = read.csv(
+  file = file.path(correlation, "complete_df.csv"), 
+  sep = ",", 
+  header = TRUE
+)
 ppiPrices=read.csv(
   file = file.path(correlation, "PPI-&-Import-prices.csv"), 
-  sep = ",", 
+  sep = ";", 
   
   header = TRUE
 )
