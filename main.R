@@ -298,7 +298,25 @@ ggsave(file.path(image, "loghistogram-of-importers.png"))
 
 
 
-ppiPrices=read.csv( 
+
+
+
+
+library(ggplot2)
+library(dplyr)
+library(here)
+library(tidyverse)
+library(readr)
+library(stringr)
+
+# use "here" library because we used git and colleges r studio had problem with paths.
+introduction = here("data","introduction")
+comparision= here("data","comparision")
+image=here("images")
+
+
+#importing data
+ppiPrices=read.csv(
   file = file.path(comparision, "PPI-&-Import-prices.csv"), 
   sep = ",", 
   header = TRUE
@@ -309,7 +327,6 @@ valueOfImports = read.csv(
   skip = 3, 
   header = TRUE,
 )
-
 ImportVolumes =read.csv(
   file = file.path(comparision, "usitc.csv"), 
   sep = ";", 
@@ -324,31 +341,8 @@ valueOfImportsMonths = valueOfImports[-c(1:11),]
 valueOfImportsMonths = valueOfImportsMonths %>%
   filter(row_number() %% 13 != 0)
 
-#unifying time period
-PPIValueMerger = ppiPrices[-c(1:337),]
-PPIValueMerger = PPIValueMerger[-c(291),]
-PPIValueMerger = PPIValueMerger %>%
-  bind_cols(valueOfImportsMonths %>% select(CIF.Value..Gen....US.)) %>%
-  mutate(CIF.Value..Gen....US. = as.numeric(str_remove_all(`CIF.Value..Gen....US.`, "[,$]")) / 1e6
-  )
 
-ppiPrices2000r = remove_missing(ppiPrices2000)
-indeXPCU = ppiPrices2000r$PCU3262132621 [c(1)]
-indeXIZ =  ppiPrices2000r$IZ32621 [c(1)]
-
-ppiPrices2000r$PCU3262132621=ppiPrices2000r$PCU3262132621 /(indeXPCU*0.01)
-ppiPrices2000r$IZ32621 = ppiPrices2000r$IZ32621/(indeXIZ*0.01)
-
-
-
-#scatter plot graph
-ggplot(data = ppiPrices2000r,aes(x=IZ32621,y=PCU3262132621)) +
-  geom_point(size=1,color=1) +
-  geom_smooth(method = 'lm')
-ggsave(file.path(image, "PcuIzCorellation.png"))
-
-
-#filtering data and sorting data
+#filtering relevant data,and sorting them out
 ImportVolumesSort = ImportVolumes[-c(1:11),]
 ImportVolumesSort = ImportVolumesSort %>%
   filter(Year>1999)
@@ -361,7 +355,7 @@ ImportVolumesSort <- ImportVolumesSort %>%
 ImportVolumesSort = sort_by(ImportVolumesSort, ~ Year + Month)
 write_csv(ImportVolumesSort, file.path(comparision, "ImportVolumesSort.csv"))
 
-
+#filtering relevant data,and sorting them out
 GeneralCif = ImportVolumes[c(906:1353),]
 GeneralCif = GeneralCif %>%
   filter(Year>1999)
@@ -375,6 +369,8 @@ GeneralCif <- GeneralCif %>%
   )
 GeneralCif = sort_by(GeneralCif, ~ Year + Month)
 
+
+#merging data into 1 table, for easier comparision
 ppiPrices2000 = ppiPrices2000%>%
   bind_cols(ImportVolumesSort %>% select(General.First.Unit.of.Quantity))
 ppiPrices2000 = ppiPrices2000%>%
@@ -385,12 +381,49 @@ ppiPrices2000 = ppiPrices2000 %>%
     General_Cif_Imports_value = as.numeric(General_Cif_Imports_value)
   )
 ppiPrices2000 = ppiPrices2000 %>%
-mutate(hsPrice = General_Cif_Imports_value / General.First.Unit.of.Quantity)
+  mutate(hsPrice = General_Cif_Imports_value / General.First.Unit.of.Quantity)
 
+df=read.csv(file = file.path(comparision, "complete_df.csv"))
 
 write_csv(ppiPrices2000, file.path(comparision, "complete_df.csv"))
 
-cor(ppiPrices2000r$IZ32621,ppiPrices2000r$PCU3262132621,use = 'complete.obs')
+#indexing data, so they start at the same base, plus removing missing values
+ppiPrices2000r = remove_missing(ppiPrices2000)
+indeXPCU = ppiPrices2000r$PCU3262132621 [c(1)]
+indeXIZ =  ppiPrices2000r$IZ32621 [c(1)]
+ideXHS = ppiPrices2000r$hsPrice [c(1)]
+ppiPrices2000r$PCU3262132621=ppiPrices2000r$PCU3262132621 /(indeXPCU*0.01)
+ppiPrices2000r$IZ32621 = ppiPrices2000r$IZ32621/(indeXIZ*0.01)
+ppiPrices2000r$hsPrice = ppiPrices2000r$hsPrice/(ideXHS*0.01)
+
+#scatter plot graph between PPU and IZ
+ggplot(data = ppiPrices2000r,aes(x=IZ32621,y=PCU3262132621)) +
+  geom_point(size=1,color=1) +
+  geom_smooth(method = 'lm')
+ggsave(file.path(image, "PcuIzCorellation.png"))
+
+#scatter plot graph between PPU and HS price
+ggplot(data = ppiPrices2000r,aes(x=hsPrice,y=PCU3262132621)) +
+  geom_point(size=1,color=1) +
+  geom_smooth(method = 'lm')
+ggsave(file.path(image, "PpiHsCorellation.png"))
+
+
+cor(ppiPrices2000r$IZ32621,ppiPrices2000r$PCU3262132621)
+cor(ppiPrices2000r$hsPrice,ppiPrices2000r$PCU3262132621)
+cor(ppiPrices2000r$hsPrice,ppiPrices2000r$IZ32621)
+
+  
+
+
+
+#unifying time period
+PPIValueMerger = ppiPrices[-c(1:337),]
+PPIValueMerger = PPIValueMerger[-c(291),]
+PPIValueMerger = PPIValueMerger %>%
+  bind_cols(valueOfImportsMonths %>% select(CIF.Value..Gen....US.)) %>%
+  mutate(CIF.Value..Gen....US. = as.numeric(str_remove_all(`CIF.Value..Gen....US.`, "[,$]")) / 1e6
+  )
 
 
 ######################################################################
