@@ -300,15 +300,6 @@ ggsave(file.path(image, "loghistogram-of-importers.png"))
 
 
 
-
-
-library(ggplot2)
-library(dplyr)
-library(here)
-library(tidyverse)
-library(readr)
-library(stringr)
-
 # use "here" library because we used git and colleges r studio had problem with paths.
 introduction = here("data","introduction")
 comparision= here("data","comparision")
