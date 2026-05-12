@@ -384,7 +384,7 @@ ppiPrices2000 = ppiPrices2000 %>%
     General.First.Unit.of.Quantity = as.numeric(General.First.Unit.of.Quantity),
     General_Cif_Imports_value = as.numeric(General_Cif_Imports_value)
   )
-ppiPrices2000 = remove_missing(ppiPrices2000) %>%
+ppiPrices2000 = ppiPrices2000 %>%
 mutate(hsPrice = General_Cif_Imports_value / General.First.Unit.of.Quantity)
 
 
