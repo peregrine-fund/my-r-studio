@@ -40,6 +40,8 @@ ggplot(industrial_production, aes(x = observation_date, y = IPG326S)) +
     date_labels = '%Y'
   ) +
   theme_minimal() +
+  labs(x = 'Year') +
+  labs(y = 'Industrial Production Level (Index 2017=100)') +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
@@ -53,6 +55,8 @@ ggplot(industrial_production, aes(x = observation_date, y = IPG326S_CH1)) +
     date_labels = "%Y"
   ) +
   theme_minimal() +
+  labs(x = 'Year') +
+  labs(y = 'Annual Growth Rate (%)') +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
