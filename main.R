@@ -404,7 +404,9 @@ cor(ppiPrices2000r$IZ32621,ppiPrices2000r$PCU3262132621)
 cor(ppiPrices2000r$hsPrice,ppiPrices2000r$PCU3262132621)
 cor(ppiPrices2000r$hsPrice,ppiPrices2000r$IZ32621)
 
-  
+CagrPcu= ((ppiPrices2000$PCU3262132621 [c(315)])/ppiPrices2000$PCU3262132621 [c(1)])**(1/315)-1
+CagrIz= ((ppiPrices2000r$IZ32621 [c(243)])/ppiPrices2000r$IZ32621 [c(1)])**(1/243)-1
+CagrHs= ((ppiPrices2000$hsPrice [c(315)])/ppiPrices2000$hsPrice [c(1)])**(1/315)-1 
 
 
 
