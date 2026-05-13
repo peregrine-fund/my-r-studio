@@ -5,6 +5,12 @@
 ---
 
 ## Michal
+CAGR GROWTH RATE.
+popsat korelaci.
+<!-- nejake vysvetleni proc v americe se zvysili ceny.--!>
+
+
+
 
 Please compare ppi and census import prices. Dont compare import price index from fred because its to 2005.  
 Census import category for tires ( 4011 based on hs ) is different than fred (302.. NAICS number). I will explain it.  
@@ -15,8 +21,12 @@ Do scatter plot of the price changes ( census import price vs ppi fred). Please 
 ## LUKAS
 Lukasi data byly procistene automaticky co jsem tam pridal s temi importy. Kdyztak napis kdyby neco nebylo nesedelo. A prosim zachovavej raw data. jestli chces na nich filtrovat tak vytvor novy csv   
 <!--for labor.csv maybe look at unit labor cost, how much is capital how much intermediate-->
+<<<<<<< HEAD
 
 description of figues, pevne grafy na spravnem miste
+=======
+dodelat popis technickych veci v R
+>>>>>>> refs/remotes/origin/main
 ---
 ## Jacob Notes
 Add dataset for importing countries to USA  

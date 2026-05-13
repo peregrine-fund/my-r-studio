@@ -10,3 +10,5 @@
 .Ruser
 .Rproj.user/
 .*.swp
+*.bbl
+*.blg
