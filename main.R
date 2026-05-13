@@ -82,100 +82,76 @@ industrial_production$growth_zscore <- (industrial_production$IPG326S_CH1 - mean
 outliers_z <- industrial_production[abs(industrial_production$growth_zscore) > 3, ]
 print(outliers_z)
 
-workers_stats <- read.csv(file.path(introduction,"rubber-workers-data.csv"), sep = ";", check.names = FALSE)
-#table(workers_stats)
+library(tidyverse)
 
-#labor stats
-#cleaning of the dataset + I will comment on that later
-# 1. Load and subset
-rubberWorkers = read.csv(file.path(introduction,'rubber-workers-data.csv'), sep = ';', na.strings = "N.A.", check.names = FALSE)
-cleanedRubberWorkers = rubberWorkers[, -(1:5)]
+# 1. NAČTENÍ A ČIŠTĚNÍ (Tidyr way)
+# ---------------------------------------------------------
+raw_data <- read.csv(file.path(introduction, "rubber-workers-data.csv"), 
+                     sep = ";", na.strings = "N.A.", check.names = FALSE)
 
-# 2. Reshape to LONG
-cleanedRubberWorkers = reshape(
-  cleanedRubberWorkers, 
-  direction = "long", 
-  varying   = names(cleanedRubberWorkers)[3:ncol(cleanedRubberWorkers)],
-  times     = names(cleanedRubberWorkers)[3:ncol(cleanedRubberWorkers)],
-  v.names   = "Value", 
-  timevar   = "Year", 
-  idvar     = c("Measure", "Units")
-)
+profitability_tidy <- raw_data %>%
+  # Odstraníme nepotřebné meta sloupce
+  select(-(1:5)) %>%
+  # Převedeme roky ze sloupců do řádků
+  pivot_longer(cols = -c(Measure, Units), names_to = "Year", values_to = "Value") %>%
+  # Vyčistíme data: odstraníme čárky, převedeme na čísla a zkrátíme názvy
+  mutate(
+    Year = as.numeric(Year),
+    Value = as.numeric(gsub(",", "", Value)),
+    Category = gsub("-Millions of current dollars", "", paste0(Measure, "-", Units))
+  ) %>%
+  # Převedeme zpět na široký formát pro snadné počítání
+  pivot_wider(id_cols = Year, names_from = Category, values_from = Value) %>%
+  # Vybereme jen sloupce s miliony (očištěné od dlouhých názvů)
+  select(Year, Revenue = `Sectoral output`, Total_Cost = `Combined inputs costs`, 
+         Labor = `Labor compensation`, Intermediate = `Intermediate inputs costs`, 
+         Capital = `Capital costs`)
 
-# 3. Create combined name
-cleanedRubberWorkers$Measure_Units <- paste0(cleanedRubberWorkers$Measure, "-", cleanedRubberWorkers$Units)
-
-# 4. Reshape to WIDE
-cleanedRubberWorkers <- reshape(
-  cleanedRubberWorkers, 
-  direction = "wide", 
-  idvar     = "Year", 
-  timevar   = "Measure_Units",
-  drop      = c("Measure", "Units")
-)
-
-# --- THE FIX STARTS HERE ---
-# This searches for "Value." in the names and replaces it with nothing ""
-names(cleanedRubberWorkers) <- gsub("Value.", "", names(cleanedRubberWorkers))
-# --- THE FIX ENDS HERE ---
-
-# 5. Set Year as index (Note: Fixed typo from 'year' to 'Year')
-rownames(cleanedRubberWorkers) = cleanedRubberWorkers$Year
-
-head(cleanedRubberWorkers)
-# Find column indices that contain "Millions"
-million_cols <- grep("Millions", names(cleanedRubberWorkers))
-
-# Create the new dataframe including the Year column
-profitability <- cleanedRubberWorkers[, c("Year", names(cleanedRubberWorkers)[million_cols])]
-
-# Clean the data: Remove commas and convert to numeric
-# (R can't plot "20,324.6" if it's stored as text)
-for(i in 2:ncol(profitability)) {
-  profitability[, i] <- as.numeric(gsub(",", "", profitability[, i]))
-}
-library(ggplot2)
-
-# Ensure Year is numeric for the x-axis
-profitability$Year_Num <- as.numeric(as.character(profitability$Year))
-
-# Create the plot by adding layers manually
-# Note: I am using the exact column names from your grep result
-ggplot(data = profitability, aes(x = Year_Num)) +
-  # 1. Revenue (The Top Line)
-  geom_line(aes(y = `Sectoral output-Millions of current dollars`, color = "Revenue"), size = 1.2) +
-  geom_point(aes(y = `Sectoral output-Millions of current dollars`, color = "Revenue")) +
-  
-  # 2. Total Cost
-  geom_line(aes(y = `Combined inputs costs-Millions of current dollars`, color = "Total Cost"), size = 1.2) +
-  geom_point(aes(y = `Combined inputs costs-Millions of current dollars`, color = "Total Cost")) +
-  
-  # 3. Labor (Component)
-  geom_line(aes(y = `Labor compensation-Millions of current dollars`, color = "Labor"), linetype = "dashed") +
-  
-  # 4. Intermediate Inputs (Component)
-  geom_line(aes(y = `Intermediate inputs costs-Millions of current dollars`, color = "Intermediate"), linetype = "dashed") +
-  
-  # 5. Capital (Component)
-  geom_line(aes(y = `Capital costs-Millions of current dollars`, color = "Capital"), linetype = "dashed") +
-  
-  # Formatting
+# 2. GRAF: ABSOLUTNÍ HODNOTY (REVENUE VS COSTS)
+# ---------------------------------------------------------
+ggplot(profitability_tidy, aes(x = Year)) +
+  geom_line(aes(y = Revenue, color = "Revenue"), size = 1.2) +
+  geom_point(aes(y = Revenue, color = "Revenue")) +
+  geom_line(aes(y = Total_Cost, color = "Total Cost"), size = 1.2) +
+  geom_point(aes(y = Total_Cost, color = "Total Cost")) +
+  geom_line(aes(y = Labor, color = "Labor"), linetype = "dashed") +
+  geom_line(aes(y = Intermediate, color = "Intermediate"), linetype = "dashed") +
+  geom_line(aes(y = Capital, color = "Capital"), linetype = "dashed") +
   scale_color_manual(values = c(
-    "Revenue" = "darkgreen", 
-    "Total Cost" = "red", 
-    "Labor" = "blue", 
-    "Intermediate" = "orange", 
-    "Capital" = "grey40"
+    "Revenue" = "darkgreen", "Total Cost" = "red", 
+    "Labor" = "blue", "Intermediate" = "orange", "Capital" = "grey40"
   )) +
   labs(
     title = "Tire Industry: Revenue vs. Costs (Millions)",
-    subtitle = "Struggle Analysis: The narrowing gap between Green (Revenue) and Red (Total Cost)",
-    x = "Year",
-    y = "Millions of USD",
-    color = "Financial Category"
+    subtitle = "Analysis of the narrowing profit margin",
+    y = "Millions of USD", x = "Year"
   ) +
   theme_minimal()
 
+# 3. GRAF: PROCENTUÁLNÍ PODÍL NA NÁKLADECH (%)
+# ---------------------------------------------------------
+# Nejdříve spočítáme podíly jednotlivých složek na celkových nákladech
+cost_percentage_data <- profitability_tidy %>%
+  mutate(
+    Labor_Pct = (Labor / Total_Cost) * 100,
+    Intermediate_Pct = (Intermediate / Total_Cost) * 100,
+    Capital_Pct = (Capital / Total_Cost) * 100
+  ) %>%
+  select(Year, Labor_Pct, Intermediate_Pct, Capital_Pct) %>%
+  pivot_longer(-Year, names_to = "Cost_Component", values_to = "Percentage")
+
+ggplot(cost_percentage_data, aes(x = Year, y = Percentage, fill = Cost_Component)) +
+  geom_area(alpha = 0.8, color = "white") +
+  scale_fill_manual(
+    values = c("Labor_Pct" = "blue", "Intermediate_Pct" = "orange", "Capital_Pct" = "grey40"),
+    labels = c("Capital", "Intermediate", "Labor")
+  ) +
+  labs(
+    title = "Tire Industry: Cost Structure (%)",
+    subtitle = "Relative share of Labor, Intermediate Inputs, and Capital in Total Costs",
+    y = "Share of Total Cost (%)", x = "Year", fill = "Component"
+  ) +
+  theme_minimal()
 #############################
 #############################
 #############################
@@ -343,7 +319,8 @@ ImportVolumesSort <- ImportVolumesSort %>%
     Year = as.numeric(Year),
     Month = as.numeric(Month)
   )
-ImportVolumesSort = sort_by(ImportVolumesSort, ~ Year + Month)
+ImportVolumesSort <- ImportVolumesSort %>%
+  arrange(Year, Month)
 write_csv(ImportVolumesSort, file.path(comparision, "ImportVolumesSort.csv"))
 
 #filtering relevant data,and sorting them out
@@ -358,8 +335,8 @@ GeneralCif <- GeneralCif %>%
     Year = as.numeric(Year),
     Month = as.numeric(Month)
   )
-GeneralCif = sort_by(GeneralCif, ~ Year + Month)
-
+GeneralCif <- GeneralCif %>%
+  arrange(Year, Month)
 
 #merging data into 1 table, for easier comparision
 ppiPrices2000 = ppiPrices2000%>%
@@ -429,6 +406,71 @@ library(tidyverse)
 #rm(list=ls())
 correlation <- here("data", "correlation")
 
+correlationDf=read.csv(file.path(comparision, "complete_df.csv"))
+industrial_production = read.csv(file.path(introduction,"fredgraph_production_nondurable_goods_tires.csv"))
+industrial_production <- industrial_production %>%
+  mutate(observation_date = as.Date(observation_date))
+summary(industrial_production)
+
+
+
+#main work ( chart and descriptive stats):
+
+# 0.94 - really high correlation! Because increase in prices of pneumatics is all over the world - CIF value ( quanity * prices ) will also increase
+startingIndex=1
+summary(ppiPrices)
+print(ppiPrices$observation_date)
+print(valueOfImports$Time)
+correlationDf <- correlationDf %>%
+
+  rename(
+    quantity = General.First.Unit.of.Quantity,
+    importCifValue = General_Cif_Imports_value,
+    PPI = PCU3262132621,
+    IPI = IZ32621,
+    HSP= hsPrice
+  ) %>%
+  mutate(
+    observation_date = as.Date(observation_date),
+    PPI_ind = (PPI / PPI[startingIndex]) * 100,
+    HSP_ind=(HSP/HSP[startingIndex])*100,
+    #IPI_ind=(IPI/IPI[startingIndex])*100,
+    quantity_ind=(quantity/quantity[startingIndex])*100,
+    price_ratio=PPI_ind/HSP_ind*100,
+    import_ind = (importCifValue / importCifValue[startingIndex]) * 100,
+    PPI_change =(PPI - lag(PPI)) / lag(PPI),
+    importCifValue_ind=importCifValue/importCifValue[startingIndex],
+    import_change =(importCifValue - lag(importCifValue/IPI)) / lag(importCifValue/IPI)
+    
+  )%>%
+left_join(industrial_production, by = "observation_date") %>%
+  rename(
+    production = IPG326S,
+    
+    
+  )%>%
+  mutate(
+    production_ind=production/production[startingIndex]*100,
+    volume_ratio=production_ind/importCifValue_ind*100
+  )
+
+cor(correlationDf$HSP_ind,correlationDf$quantity)
+cor(correlationDf$volume_ratio,correlationDf$price_ratio)
+
+ggplot(data=correlationDf, aes(x = observation_date)) +
+  geom_line(aes(y = HSP_ind, color = "quantity")) +
+  geom_line(aes(y = IPI, color = "Import Value")) +
+
+  scale_x_date(
+    date_breaks = '3 years',
+    date_labels = '%Y'
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+ggsave(file.path(image, "timeseries_growthrates.png"))
+
 #NOW LOADING DATA FROM ./data/correlation and merging dataframes together and filtering redundant data,
 valueOfImports = read.csv(
   file = file.path(correlation, "import-census-4011.csv"), 
@@ -447,11 +489,7 @@ ppiPrices=read.csv(
   
   header = TRUE
 )
-
-summary(ppiPrices)
-print(ppiPrices$observation_date)
-print(valueOfImports$Time)
-
+#Using complete_df.csv made in comparision part. 
 
 imports_clean <- valueOfImports %>%
   filter(str_detect(Time, " ") & !str_detect(Time, "through")) %>%
