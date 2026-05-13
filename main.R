@@ -40,6 +40,8 @@ ggplot(industrial_production, aes(x = observation_date, y = IPG326S)) +
     date_labels = '%Y'
   ) +
   theme_minimal() +
+  labs(x = 'Year') +
+  labs(y = 'Industrial Production Level (Index 2017=100)') +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
@@ -53,6 +55,8 @@ ggplot(industrial_production, aes(x = observation_date, y = IPG326S_CH1)) +
     date_labels = "%Y"
   ) +
   theme_minimal() +
+  labs(x = 'Year') +
+  labs(y = 'Annual Growth Rate (%)') +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
@@ -381,7 +385,9 @@ cor(ppiPrices2000r$IZ32621,ppiPrices2000r$PCU3262132621)
 cor(ppiPrices2000r$hsPrice,ppiPrices2000r$PCU3262132621)
 cor(ppiPrices2000r$hsPrice,ppiPrices2000r$IZ32621)
 
-  
+CagrPcu= ((ppiPrices2000$PCU3262132621 [c(315)])/ppiPrices2000$PCU3262132621 [c(1)])**(1/315)-1
+CagrIz= ((ppiPrices2000r$IZ32621 [c(243)])/ppiPrices2000r$IZ32621 [c(1)])**(1/243)-1
+CagrHs= ((ppiPrices2000$hsPrice [c(315)])/ppiPrices2000$hsPrice [c(1)])**(1/315)-1 
 
 
 

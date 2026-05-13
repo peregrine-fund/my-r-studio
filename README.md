@@ -19,11 +19,12 @@ Do scatter plot of the price changes ( census import price vs ppi fred). Please 
 
 ---
 ## LUKAS
-Lukasi data byly procistene automaticky co jsem tam pridal s temi importy. Kdyztak napis kdyby neco nebylo nesedelo. A prosim zachovavej raw data. jestli chces na nich filtrovat tak vytvor novy csv   
+Lukasi data byly procistene automaticky co jsem tam pridal s temi importy. Kdyztak napis kdyby neco nebylo nesedelo. A prosim zachovavej raw data. jestli chces na nich filtrovat tak vytvor novy csv
+description of figues, pevne grafy na spravnem miste
++ dodelam freeman diaconis rule pro loghistogram
 <!--for labor.csv maybe look at unit labor cost, how much is capital how much intermediate-->
 <<<<<<< HEAD
 
-description of figues, pevne grafy na spravnem miste
 =======
 dodelat popis technickych veci v R
 >>>>>>> refs/remotes/origin/main
