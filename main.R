@@ -438,14 +438,41 @@ correlation <- here("data", "correlation")
 rawCorrelationDf=read.csv(file.path(comparision, "complete_df.csv"))
 industrial_production = read.csv(file.path(introduction,"fredgraph_production_nondurable_goods_tires.csv"))
 industrial_production <- industrial_production %>%
-  mutate(observation_date = as.Date(observation_date))
+mutate(observation_date = as.Date(observation_date))
 summary(industrial_production)
 
+#adding tarrifs
+#NOW LOADING DATA FROM ./data/correlation and merging dataframes together and filtering redundant data,
+valueOfImports = read.csv(
+  file = file.path(correlation, "import-census-4011.csv"), 
+  sep = ";", 
+  skip = 3, 
+  header = TRUE
+)
+
+
+#Using complete_df.csv made in comparision part. 
+
+tarrifs_data <- valueOfImports %>%
+  filter(str_detect(Time, " ") & !str_detect(Time, "through")) %>%
+  
+  select(Time, calculatedDuty= 8)%>% 
+  mutate(
+    calculatedDuty = as.numeric(gsub(",", "", calculatedDuty)),
+    Date = as.Date(paste("01", Time), format = "%d %b %Y")) %>%
+  select(Date, calculatedDuty)
+
+rawCorrelationDf <-rawCorrelationDf %>%
+  mutate(
+    observation_date = as.Date(observation_date),
+    
+  )%>%
+left_join(tarrifs_data, by = c("observation_date" = "Date"))
+  
 
 
 #main work ( chart and descriptive stats):
 
-# 0.94 - really high correlation! Because increase in prices of pneumatics is all over the world - CIF value ( quanity * prices ) will also increase
 startingIndex=1 # 72 is where ipi starts.
 summary(ppiPrices)
 print(ppiPrices$observation_date)
@@ -460,10 +487,9 @@ correlationDf <- rawCorrelationDf %>%
     HSP= hsPrice
   ) %>%
   mutate(
-    observation_date = as.Date(observation_date),
     PPI_ind = (PPI / PPI[startingIndex]) * 100,
     HSP_ind=(HSP/HSP[startingIndex])*100,
-    #IPI_ind=(IPI/IPI[startingIndex])*100,
+    #IPI_ind=(IPI/IPI[startingIndex])*100, #- CANT DO IT BECAUSE IT STARTS IN 2005
     quantity_ind=(quantity/quantity[startingIndex])*100,
     price_ratio=PPI_ind/HSP_ind*100,
     import_ind = (importCifValue / importCifValue[startingIndex]) * 100,
@@ -472,6 +498,9 @@ correlationDf <- rawCorrelationDf %>%
     import_change =(importCifValue - lag(importCifValue/IPI)) / lag(importCifValue/IPI)
     
   )%>%
+
+  
+  
 left_join(industrial_production, by = "observation_date") %>%
   rename(
     production = IPG326S,
@@ -507,54 +536,26 @@ df_for_sa <- df_for_sa %>%
     importCifValue_SA_ind = (importCifValue_SA / importCifValue_SA[startingIndex]) * 100,
     HSP_SA = importCifValue_SA / quantity_SA,
     HSP_SA_ind= (HSP_SA / HSP_SA[startingIndex]) * 100,
-    volume_ratio=production_ind/HSP_SA*100,
+    volume_ratio=production_ind/HSP_SA_ind*100,
     price_ratio=PPI_ind/HSP_ind*100,
-    BLS_ind=BLS_Value/BLS_Value[startingIndex]*100
+    BLS_ind=BLS_Value/BLS_Value[startingIndex]*100,
+    BLS_share=BLS_ind/PPI_ind*100,
+    duty_ratio=calculatedDuty/importCifValue,
+    HSP_duty_ind=HSP_ind*(duty_ratio+1)
   )
 
 # 5. Use the SA data for your correlations
 print("--- Raw Correlation ---")
-cor(df_for_sa$volume_ratio, df_for_sa$price_ratio, use = "complete.obs")
-library(tidyverse)
-library(slider)
 
-# 1. Create a vector of unique starting years in your data
-start_years <- unique(format(df_for_sa$observation_date, "%Y"))
-start_years <- sort(as.numeric(start_years))
+#REALLY COOL! +0.93 COR - means that with decrease of CPI, 
+cor(df_for_sa$BLS_share, df_for_sa$volume_ratio, use = "complete.obs")
 
-# We filter out the last 2 years so we have enough data points for a valid correlation
-years_to_test <- start_years[start_years <= 2022]
+#THIS CORRELATION IS MORE DEPRESING THAN FOOD FROM MENZA. CANT DEDUCT ANYTHING! -
+cor(df_for_sa$price_ratio, df_for_sa$volume_ratio, use = "complete.obs")
 
-# 2. Map through each year and calculate correlation from that year UNTIL the end
-optimized_cor <- map_df(years_to_test, function(yr) {
-  
-  # Subset data from January 1st of the 'test year' to the present
-  sub_df <- df_for_sa %>% 
-    filter(observation_date >= as.Date(paste0(yr, "-01-01")))
-  
-  # Calculate the correlation
-  current_cor <- cor(sub_df$volume_ratio, sub_df$price_ratio, use = "complete.obs")
-  
-  return(data.frame(StartYear = yr, Correlation = current_cor))
-})
-
-# 3. Find the year with the absolute highest correlation
-best_year_row <- optimized_cor[which.max(abs(optimized_cor$Correlation)), ]
-
-print(paste("The best year to start your analysis is", best_year_row$StartYear, 
-            "with a correlation of", round(best_year_row$Correlation, 4)))
-
-# 4. Plot the "Correlation Decay/Growth"
-ggplot(optimized_cor, aes(x = StartYear, y = Correlation)) +
-  geom_line(size = 1, color = "darkgreen") +
-  geom_point(data = best_year_row, color = "red", size = 3) +
-  theme_minimal() +
-  labs(title = "Total Correlation: Start Year until Present",
-       subtitle = "Finding the 'Economic Regime' that fits the data best",
-       x = "Starting Year", y = "Correlation (until 2024)")
 ggplot(data=df_for_sa, aes(x = observation_date)) +
-  geom_line(aes(y = quantity_SA_ind, color = "1")) +
-  geom_line(aes(y = HSP_SA_ind, color = "2")) +
+  geom_line(aes(y = BLS_share, color = "1")) +
+  geom_line(aes(y = volume_ratio, color = "2")) +
   
   scale_x_date(
     date_breaks = '3 years',
@@ -563,9 +564,11 @@ ggplot(data=df_for_sa, aes(x = observation_date)) +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
-  )
+)
 
-print("--- Seasonally Adjusted Correlation ---")
+library(tidyverse)
+library(slider)
+
 cor(df_for_sa$quantity_SA_ind, df_for_sa$price_ratio, use = "complete.obs")
 cor(correlationDf$price_ratio,correlationDf$volume_ratio)
 cor(correlationDf$HSP_ind,correlationDf$quantity)
@@ -573,10 +576,10 @@ cor(correlationDf$HSP_ind,correlationDf$quantity)
 cor(correlationDf$quantity_ind,correlationDf$price_ratio)
 
 
-#NOT IMPORTANT JUST FOR COMPARISION OF HS PRICE AND IMPORT PRICE INDEX
-ggplot(data=correlationDf, aes(x = observation_date)) +
-  geom_line(aes(y = HSP_ind, color = "HS price")) +
-  geom_line(aes(y = IPI, color = "import price index")) +
+#PRICE TIMESERIES - BEWARE IMPORT PRICE INDEX STARTS AT 2005
+ggplot(data=df_for_sa, aes(x = observation_date)) +
+  geom_line(aes(y = volume_ratio, color = "HS price")) +
+  geom_line(aes(y = BLS_share, color = "import price index")) +
   geom_line(aes(y = BLS_Value, color = "CPI")) +
   geom_line(aes(y = PPI_ind, color = "PPI")) +
   
@@ -603,75 +606,33 @@ ggplot(data=df_for_sa, aes(x = observation_date)) +
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
 #NOW LOADING DATA FROM ./data/correlation and merging dataframes together and filtering redundant data,
-valueOfImports = read.csv(
-  file = file.path(correlation, "import-census-4011.csv"), 
-  sep = ";", 
-  skip = 3, 
-  header = TRUE
-)
-ppiPrices=read.csv(
-  file = file.path(correlation, "PPI-&-Import-prices.csv"), 
-  sep = ";", 
-  
-  header = TRUE
-)
-#Using complete_df.csv made in comparision part. 
 
-imports_clean <- valueOfImports %>%
-  filter(str_detect(Time, " ") & !str_detect(Time, "through")) %>%
-  
-  select(Time, ImportCifValue= 8)%>% 
-  mutate(
-    ImportCifValue = as.numeric(gsub(",", "", ImportCifValue)),
-    Date = as.Date(paste("01", Time), format = "%d %b %Y")) %>%
-  select(Date, ImportCifValue)
-summary(ppiPrices)
 
-ppi_clean <- ppiPrices %>%
-  mutate(
-    Date = as.Date(observation_date),
-    PPI = PCU3262132621 
-  ) %>%
-  select(Date, PPI)
-#IPI stands for  import price index
-ipi_clean <- ppiPrices %>%
-  mutate(
-    Date = as.Date(observation_date),
-    IPI = IZ32621 
-  ) %>%
-  select(Date, IPI)
-view(ipi_clean)
-
-startingIndex=48
 # THIS DF BELLOW WILL BE USED MAINLY TO SEE CORRELATION
 # ALSO ADDED INDEXES STARTING AT FIRST VALUE AND % CHANGES
-correlationDf <-correlationDf %>%
-  left_join(imports_clean, by = c("observation_date" = "Date")) %>%
-  mutate(
-    Import_ind = (ImportCifValue / ImportCifValue[1]) * 100,
-    IMPORT_change =(ImportCifValue - lag(ImportCifValue/IPI)) / lag(ImportCifValue/IPI)
-    
-  )
+
 
 #view(correlationDf)
 
 #main work ( chart and descriptive stats):
 
-# 0.94 - really high correlation! Because increase in prices of pneumatics is all over the world - CIF value ( quanity * prices ) will also increase
-cor(correlationDf$ImportCifValue,correlationDf$PPI)
-#
-cor(correlationDf$IMPORT_change, correlationDf$PPI_ind, use = "complete.obs")
-cor(correlationDf$ImportCifValue, correlationDf$price_ratio, use = "complete.obs")
+#3d histogram
+ggplot(df_for_sa, aes(x = PPI_change, y = IMPORT_change)) +
+  # This creates the "3D" effect using color density
+  geom_bin2d(bins = 30) + 
+  scale_fill_viridis_c() + # A nice color scale for density
+  labs(
+    title = "Density of Monthly % Changes",
+    x = "PPI % Change",
+    y = "Import Value % Change",
+    fill = "Frequency"
+  ) +
+  theme_minimal()
 
-summary(correlationDf)
-
-scatter.smooth(correlationDf$price_ratio, correlationDf$ImportCifValue)
-
-print(ipi_clean$IPI_ind)
-ggplot(data=correlationDf, aes(x = Date)) +
-  geom_line(aes(y = PPI_ind, color = "PPI")) +
-  geom_line(aes(y = Import_ind, color = "Import Value")) +
-  geom_line(aes(y = IPI_ind, color = "Import price index Value")) +
+#tariff 
+ggplot(data=df_for_sa, aes(x = observation_date)) +
+  geom_line(aes(y = HSP_duty_ind, color = "1")) +
+  geom_line(aes(y = HSP_ind, color = "2")) +
   
   scale_x_date(
     date_breaks = '3 years',
@@ -681,25 +642,4 @@ ggplot(data=correlationDf, aes(x = Date)) +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
-ggplot(correlationDf, aes(x = PPI_ind / IPI_ind, y = ImportCifValue)) +
-  geom_point(alpha = 0.4) +
-  geom_smooth(method = "loess", color = "red") + 
-  theme_minimal() +
-  labs(
-    title = "Impact of Domestic vs. Import Price Ratio on Import Volume",
-    x = "Relative Price Index (PPI / IPI)",
-    y = "Import CIF Value"
-  )
-ggplot(correlationDf, aes(x = PPI_change, y = IMPORT_change)) +
-  # This creates the "3D" effect using color density
-  geom_bin2d(bins = 30) + 
-  scale_fill_viridis_c() + # A nice color scale for density
-  labs(
-    title = "Density of Monthly % Changes",
-    x = "PPI % Change",
-    y = "Import Value % Change",z
-    fill = "Frequency"
-  ) +
-  theme_minimal()
-
-
+ggsave(file.path(image,"tariff-price.png"))
