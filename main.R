@@ -260,7 +260,7 @@ ggplot(df_import_to_us_c, aes(x = Value)) +
   geom_histogram() +
   labs(
     x = 'Value of Imports to US (USD)',
-    y = 'Number of Observations'
+    y = 'Number of Countries'
   ) +
   theme_minimal()
 ggsave(file.path(image, "histogram-of-importers.png"))
@@ -271,7 +271,7 @@ ggplot(df_import_to_us_c,aes(x = Value)) +
   theme_minimal() +
   labs(
     x = 'Value of Imports to US (USD, Log Scale)',
-    y = 'Number of Observations'
+    y = 'Number of Countries'
   ) +
   geom_histogram()
 ggsave(file.path(image, "loghistogram-of-importers.png"))
