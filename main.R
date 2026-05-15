@@ -551,10 +551,12 @@ get_sa <- function(data_column, start_date = c(2000, 1)) {
 
 # 4. Add Seasonally Adjusted (SA) columns back to your dataframe
 df_for_sa <- df_for_sa %>%
+  filter(!is.na(quantity) & !is.na(importCifValue) & !is.na(BLS_Value)) %>%
   mutate(
     quantity_SA   = get_sa(quantity),
     production_SA= get_sa(production),
     PPI_SA=get_sa(PPI),
+    BLS_SA=get_sa(BLS_Value),
     importCifValue_SA = get_sa(importCifValue),
     # Create an index for the SA quantity to match your other variables
     quantity_SA_ind = (quantity_SA / quantity_SA[startingIndex]) * 100,
@@ -567,6 +569,7 @@ df_for_sa <- df_for_sa %>%
     price_SA_ratio=PPI_SA/HSP_SA_ind*100,
     BLS_ind=BLS_Value/BLS_Value[startingIndex]*100,
     BLS_share=BLS_ind/PPI_ind*100,
+    BLS_SA_share=((BLS_SA / BLS_SA[startingIndex]) / (PPI_SA / PPI_SA[startingIndex])) * 100,
     duty_ratio=calculatedDuty/importCifValue,
     HSP_duty_ind=HSP_ind*(duty_ratio+1),
     import_change =(importCifValue - lag(importCifValue/IPI)) / lag(importCifValue/IPI),
@@ -577,11 +580,18 @@ df_for_sa <- df_for_sa %>%
 print("--- Raw Correlation ---")
 
 #REALLY COOL! +0.93 COR - means that with decrease of CPI, 
-cor(df_for_sa$BLS_share, df_for_sa$volume_ratio, use = "complete.obs")
+cor(df_for_sa$HS, df_for_sa$volume_ratio, use = "complete.obs")
+cor(df_for_sa$BLS_SA_share, df_for_sa$volume_SA_ratio, use = "complete.obs")
+
 model <- lm(volume_ratio ~ BLS_share, data = df_for_sa)
 summary(model)
 #THIS CORRELATION IS MORE DEPRESING THAN FOOD FROM MENZA. CANT DEDUCT ANYTHING! -
 cor(df_for_sa$price_SA_ratio, df_for_sa$volume_SA_ratio, use = "complete.obs")
+cor(
+  df_for_sa$price_SA_ratio[df_for_sa$observation_date >= as.Date("2012-01-01") & df_for_sa$observation_date <= as.Date("2024-01-01")],
+  df_for_sa$volume_SA_ratio[df_for_sa$observation_date >= as.Date("2012-01-01") & df_for_sa$observation_date <= as.Date("2024-01-01")],
+  use = "complete.obs"
+)
 library(dplyr)
 
 # We create a new column where the price ratio is "shifted" forward by 2 months
@@ -592,6 +602,8 @@ df_lagged <- df_for_sa %>%
 model_lagged <- lm(volume_ratio ~ price_ratio_lag2, data = df_lagged)
 
 summary(model_lagged)
+
+
 ggplot(data=df_for_sa, aes(x = observation_date)) +
   geom_line(aes(y = BLS_share, color = "1")) +
   geom_line(aes(y = volume_ratio, color = "2")) +
@@ -643,15 +655,16 @@ ggplot(data=df_for_sa, aes(x = observation_date)) +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
 )
-ggplot(data = df_for_sa, aes(x = price_SA_ratio, y = volume_SA_ratio)) +
+ggplot(data = df_for_sa, aes(x = BLS_SA_share, y = volume_SA_ratio)) +
   geom_point(alpha = 0.5, color = "steelblue") +
   geom_smooth(method = "lm", color = "red", se = TRUE) +
   labs(
     title = "BLS Share vs Volume Ratio",
-    x = "BLS Share",
-    y = "Volume SA Ratio"
+    x = "CPI/PPI",
+    y = ""
     ) +
   theme_minimal()
+ggsave(file.path(image, "bls-scatterplot.png"))
 #NOW LOADING DATA FROM ./data/correlation and merging dataframes together and filtering redundant data,
 
 
@@ -695,3 +708,30 @@ ggplot(data=df_for_sa, aes(x = observation_date)) +
     color = "Legend"
   )
 ggsave(file.path(image,"tariff-price.png"))
+
+
+######################
+###################
+#######################
+# Define a cleaner growth function
+calc_growth <- function(x) (x - lag(x)) / lag(x)
+
+df_improved <- df_for_sa %>%
+  arrange(observation_date) %>%
+  mutate(
+    # 1. Use Log Differences for better statistical properties in ratios
+    d_price_ratio  = calc_growth(price_SA_ratio),
+    d_volume_ratio = calc_growth(volume_SA_ratio),
+    d_BLS_share    = calc_growth(BLS_SA_share),
+    
+    # 2. Lag the price change (The 'Reaction Time')
+    d_price_ratio_lag2 = lag(d_price_ratio, 2)
+  ) %>%
+  # Filter NAs created by lag and growth calcs
+  filter(!is.na(d_price_ratio_lag2))
+
+# 3. Correlation check: This is the 'Real' proof
+# If this is significantly positive, your theory holds.
+cor_real <- cor(df_improved$d_BLS_share, df_improved$d_volume_ratio)
+print(paste("Correlation of Changes:", round(cor_real, 3)))
+

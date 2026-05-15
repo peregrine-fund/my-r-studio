@@ -25,9 +25,14 @@ BLS - bureau of Labor statistics , HS - harmonized system, NAICS - North America
 
 For a long time tires were a boring business that growed bellow gdp levels and generated stable margins. Hovewer in the past 2 years the equities of tire sector ( tire and carbon black manufacturers) have dropped significantly.
 
-Management of carbon black manufacturer Orion S.A. explained in their quarterly conferences that reason for having pricing pressure and negative revenue growth was primarly from 2022 supply shock when consumers started prioritizing less quality tires imported from southeast Asia in order to cut costs. Imports from Southeast Asia have  increased in 2025 to a point that 70\% of tires sold in USA are foreing made ( in comparision to 50\% in prepandemic era).
+Managements of carbon black manufacturer Orion S.A. and Cabot explained in their quarterly conferences that reason for having pricing pressure and negative revenue growth was primarly from 2022 supply shock when consumers started prioritizing less quality tires imported from southeast Asia in order to cut costs. Imports from Southeast Asia have  increased in 2025 to a point that 70\% of tires sold in USA are foreing made ( in comparision to 50\% in prepandemic era).
 
-In conclusion US domestic tire industry could be suffering from overseas competition due to pricing pressure. We want to see whether its true by using statistical tools. 
+In conclusion US domestic tire industry could be suffering from overseas competition due to pricing pressure. The project will try to find whether higher domestic prices leads to higher share of foreign made tires in US. 
+
+Our empirical claims is that a) domestic tires have increased in price compared to foreign made price and this leads to consumer prefering foreing made tires.
+
+
+whether increases in domestic prices relative to imported prices of tires
 
 
 
@@ -125,17 +130,21 @@ Figure \ref{fig:figure7} is highly right-skewed, it is only seen that most of th
 \end{figure}
 
 \section{Comparision part}
-\section{correlation}
-We cant deduce whether higher domestic prices compared to foreign increase the foreign shares of imports.
+Due to imports of tires into USA have seasonal trends, we seasonally adjusted data ( both volumes and prices).
+ 
+\subsection{Results} 
+We cant prove our claim because domestic tires havent grown dramaticaly in price than foreign made tires. CAGR is 
 
-However theres high pattern that by increasing PPI, shares decline. 
+Secondly theres no correlation between the PPI/HS ratio and domestic share of tires produced ( correlation 
 
-It can be explained by increasing domestic prices of tires, customers switch to cheaper foreign who cost less. 
-We can see this trend directly bellow: 
 
-Ratio of domestic price to foreign price 
-\subsection{Harmonized price}
-Note that CIF value adds cost of insurance and shipments but doesnt add tarriffs! So the dramatic decline of HS price in later half of 2025 is without the tariff impact. The reason for not adding tariff charges to the CIF value is that import price index doesnt include it as well and it is not know if the prices of the tarrifs are passed out to customers. 
+PPI has a correlation of 0.90 compared to domestic share of tires produced. 
+
+By increasing PPI of tires, consumers may switch to cheap foreign made tires to offset price hike. 
+We can see figure bellow comparing CPI/PPI ratio to domestic production/quantity imported ratio. As more goods are foreign made, consumer pays on average less compared to prices of domesticly produced tires. 
+
+\subsection{Deficiencies} 
+Note that CIF value includes cost of insurance and shipments but doesnt add tarriffs! Therefore the dramatic decline of CIF prices in later half of 2025 is without the tariff impact. The reason for not adding tariff charges to the CIF value is that import price index doesnt include it as well and it is not know if the prices of the tarrifs are passed out to customers. 
 
 
 \begin{figure}[H]
@@ -144,7 +153,23 @@ Note that CIF value adds cost of insurance and shipments but doesnt add tarriffs
     \label{fig:figure8}
 \end{figure}
 
-\subsection{CPI}
+
+
+Deficiencies of our statisitcal model: quantity of tires imported 
+NAICS and HS systems do not record same products. For NAICS we extracted group 326211 ( called tire manufacturing). This group includes in addition to 4011 ( new tires) also 4012 ( retreaded or used pneumatic tires) and 4013 HS products ( inner tubes from rubber). When extracting CIF value and quantity we only used 4011 group. 
+
+We used HS import data because import price index for 326211 tire manufacturing had only data from year 2005. In addition due to lack of funding,
+
+Also price of
+Other reasons for higher tire imports may include: quality
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{images/bls-scatterplot.png}
+    \label{fig:figure8}
+\end{figure}
+Ratio of domestic price to foreign price 
+\subsection{Harmonized price}
+
 
 
 \section{Technical notes}
