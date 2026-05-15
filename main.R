@@ -91,31 +91,27 @@ print(outliers_z)
 
 library(tidyverse)
 
-# 1. NAČTENÍ A ČIŠTĚNÍ (Tidyr way)
-# ---------------------------------------------------------
+
+################
+###############
+###########
+#NOT USED - but interesting - WORKERS DATA TO SEE COST STRUCTURE OF THE TIRE INDUSTRY, COULD BE USED TO EXPLAIN DOMESTIC PRICE HIKES 
 raw_data <- read.csv(file.path(introduction, "rubber-workers-data.csv"), 
                      sep = ";", na.strings = "N.A.", check.names = FALSE)
 
 profitability_tidy <- raw_data %>%
-  # Odstraníme nepotřebné meta sloupce
   select(-(1:5)) %>%
-  # Převedeme roky ze sloupců do řádků
   pivot_longer(cols = -c(Measure, Units), names_to = "Year", values_to = "Value") %>%
-  # Vyčistíme data: odstraníme čárky, převedeme na čísla a zkrátíme názvy
   mutate(
     Year = as.numeric(Year),
     Value = as.numeric(gsub(",", "", Value)),
     Category = gsub("-Millions of current dollars", "", paste0(Measure, "-", Units))
   ) %>%
-  # Převedeme zpět na široký formát pro snadné počítání
   pivot_wider(id_cols = Year, names_from = Category, values_from = Value) %>%
-  # Vybereme jen sloupce s miliony (očištěné od dlouhých názvů)
   select(Year, Revenue = `Sectoral output`, Total_Cost = `Combined inputs costs`, 
          Labor = `Labor compensation`, Intermediate = `Intermediate inputs costs`, 
          Capital = `Capital costs`)
-
-# 2. GRAF: ABSOLUTNÍ HODNOTY (REVENUE VS COSTS)
-# ---------------------------------------------------------
+#Bellow is better
 ggplot(profitability_tidy, aes(x = Year)) +
   geom_line(aes(y = Revenue, color = "Revenue"), size = 1.2) +
   geom_point(aes(y = Revenue, color = "Revenue")) +
@@ -135,9 +131,7 @@ ggplot(profitability_tidy, aes(x = Year)) +
   ) +
   theme_minimal()
 
-# 3. GRAF: PROCENTUÁLNÍ PODÍL NA NÁKLADECH (%)
-# ---------------------------------------------------------
-# Nejdříve spočítáme podíly jednotlivých složek na celkových nákladech
+#Percentage share of cost - best to use if we decide to put the chart there
 cost_percentage_data <- profitability_tidy %>%
   mutate(
     Labor_Pct = (Labor / Total_Cost) * 100,
@@ -162,89 +156,6 @@ ggplot(cost_percentage_data, aes(x = Year, y = Percentage, fill = Cost_Component
 #############################
 #############################
 #############################
-
-target_measures <- c(
-  'Unit labor costs', 'Capital share', 'Capital costs', 'Intermediate inputs share', 'Intermediate inputs costs', 'Employment', 'Real sectoral output', 'Output per worker')
-clean_df <- df %>%
-  filter(Measure %in% target_measures) %>%
-  select(
-    Sector, NAICS, Industry, Digit, Basis, Measure, Units,
-    all_of(as.character(2000:2024))
-  )
-write_csv(clean_df, file.path(introduction, "cleaned_rubber_data_2000_2024.csv"))
-head(clean_df)
-
-
-long_df <- clean_df %>%
-  pivot_longer(
-    cols = `2000`:`2024`,        
-    names_to = 'Year',           
-    values_to = 'Value'         
-  ) %>%
-  mutate(
-    Year = as.numeric(Year),     
-    Value = as.numeric(Value)   
-  )
-#filtering data for real sectoral output
-
-df_labour <- long_df %>%
-  filter(
-    Measure == 'Real sectoral output',
-    grepl('% Change', Units) 
-  )
-print(nrow(df_labour))
-
-ggplot(df_labour, aes(x = Year, y = Value)) +
-  geom_line() +
-  theme_minimal() +
-  labs(
-    title = 'real sectoral output',
-    x = 'Year',
-    y = 'Percentage Change'
-  )
-#filtering data for output per worker
-df_output_per_worker <- long_df %>%
-  filter(
-    Measure == 'Output per worker',
-    grepl('% Change', Units) 
-  )
-ggplot(df_output_per_worker, aes(x = Year, y = Value)) +
-  geom_line() +
-  theme_minimal() +
-  labs(
-    title = 'output per worker',
-    x = 'Year',
-    y = 'Percentage Change'
-  )
-
-
-#filtering data for labor costs
-df_unit_labor_costs <- long_df %>%
-  filter(
-    Measure == 'Unit labor costs',
-    grepl('% Change', Units) 
-  )
-ggplot(df_unit_labor_costs, aes(x = Year, y = Value)) +
-  geom_line() +
-  theme_minimal() +
-  labs(
-    title = 'Unit labor costs',
-    x = 'Year',
-    y = 'Percentage Change'
-  )
-#all three together
-df_triple_labour <- long_df %>%
-  filter(
-   Measure %in% c('Real sectoral output', 'Output per worker', 'Unit labor costs'),
-    grepl('% Change', Units) 
-  )
-ggplot(df_triple_labour, aes(x = Year, y = Value, color = Measure)) +
-  geom_line() +
-  theme_minimal() +
-  labs(
-    x = 'Year',
-    y = 'Percentage Change'
-  )
 
 
 #import to the us
@@ -455,7 +366,7 @@ PPIValueMerger = PPIValueMerger %>%
 ######################################################################
 ######################################################################
 ######################################################################
-`
+
 
 
 
@@ -591,7 +502,7 @@ df_for_sa <- df_for_sa %>%
 print("--- Raw Correlation ---")
 
 #REALLY COOL! +0.93 COR - means that with decrease of CPI, 
-cor(df_for_sa$HS, df_for_sa$volume_ratio, use = "complete.obs")
+cor(df_for_sa$BLS_SA_share, df_for_sa$volume_SA_ratio, use = "complete.obs")
 cor(df_for_sa$BLS_SA_share, df_for_sa$volume_SA_ratio, use = "complete.obs")
 
 model <- lm(volume_ratio ~ BLS_share, data = df_for_sa)
@@ -633,9 +544,8 @@ ggplot(data=df_for_sa, aes(x = observation_date)) +
 ) 
 ggsave(file.path(image, "price-ratio.png"))
 
-cor(df_for_sa$quantity_SA_ind, df_for_sa$price_ratio, use = "complete.obs")
+cor(df_for_sa$price_SA_ratio, df_for_sa$volume_SA_ratio, use = "complete.obs")
 cor(correlationDf$price_ratio,correlationDf$volume_ratio)
-cor(correlationDf$HSP_ind,correlationDf$quantity)
 
 cor(correlationDf$quantity_ind,correlationDf$price_ratio)
 
@@ -674,24 +584,22 @@ ggplot(data = df_for_sa, aes(x = BLS_SA_share, y = volume_SA_ratio)) +
   geom_point(alpha = 0.5, color = "steelblue") +
   geom_smooth(method = "lm", color = "red", se = TRUE) +
   labs(
-    title = "BLS Share vs Volume Ratio",
+    title = "Relation between CPI/PPI and Domestic production/quality of imports ",
     x = "CPI/PPI",
-    y = ""
+    y = "Domestic production/quality of imports"
     ) +
   theme_minimal()
 ggsave(file.path(image, "bls-scatterplot.png"))
 #NOW LOADING DATA FROM ./data/correlation and merging dataframes together and filtering redundant data,
 
 
-# THIS DF BELLOW WILL BE USED MAINLY TO SEE CORRELATION
-# ALSO ADDED INDEXES STARTING AT FIRST VALUE AND % CHANGES
 
 
 #view(correlationDf)
 
 #main work ( chart and descriptive stats):
 
-#3d histogram
+#3d histogram - wont used
 ggplot(df_for_sa, aes(x = PPI, y = volume_ratio)) +
   # This creates the "3D" effect using color density
   geom_bin2d(bins = 30) + 
@@ -728,25 +636,20 @@ ggsave(file.path(image,"tariff-price.png"))
 ######################
 ###################
 #######################
-# Define a cleaner growth function
+# Define a  growth function
 calc_growth <- function(x) (x - lag(x)) / lag(x)
 
 df_improved <- df_for_sa %>%
   arrange(observation_date) %>%
   mutate(
-    # 1. Use Log Differences for better statistical properties in ratios
     d_price_ratio  = calc_growth(price_SA_ratio),
     d_volume_ratio = calc_growth(volume_SA_ratio),
     d_BLS_share    = calc_growth(BLS_SA_share),
     
-    # 2. Lag the price change (The 'Reaction Time')
     d_price_ratio_lag2 = lag(d_price_ratio, 2)
   ) %>%
-  # Filter NAs created by lag and growth calcs
   filter(!is.na(d_price_ratio_lag2))
 
-# 3. Correlation check: This is the 'Real' proof
-# If this is significantly positive, your theory holds.
 cor_real <- cor(df_improved$d_BLS_share, df_improved$d_volume_ratio)
 print(paste("Correlation of Changes:", round(cor_real, 3)))
 
