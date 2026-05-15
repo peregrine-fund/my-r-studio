@@ -33,7 +33,7 @@ print(min_growthTI)
 
 
 #time series graph for production volumes
-ggplot(industrial_production, aes(x = observation_date, y = IPG326S)) +
+ggplot(industrial_production, aes(x = observation_date, y = IPG32621S)) +
   geom_line(size = 1.2) +
   scale_x_date(
     date_breaks = '3 years',
@@ -48,19 +48,19 @@ ggplot(industrial_production, aes(x = observation_date, y = IPG326S)) +
 ggsave(file.path(image, "timeseries_productionvolume.png"))
 
 #time series graph for production volumes growth rates
-ggplot(industrial_production, aes(x = observation_date, y = IPG326S_CH1)) +
-  geom_line(size = 1.2) +
-  scale_x_date(
-    date_breaks = "3 years",
-    date_labels = "%Y"
-  ) +
-  theme_minimal() +
-  labs(x = 'Year') +
-  labs(y = 'Annual Growth Rate (%)') +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1)
-  )
-ggsave(file.path(image, "timeseries_growthrates.png"))
+#ggplot(industrial_production, aes(x = observation_date, y = IPG326S_CH1)) +
+ # geom_line(size = 1.2) +
+  #scale_x_date(
+   # date_breaks = "3 years",
+    #date_labels = "%Y"
+#  ) +
+#  theme_minimal() +
+#  labs(x = 'Year') +
+#  labs(y = 'Annual Growth Rate (%)') +
+#  theme(
+#    axis.text.x = element_text(angle = 45, hjust = 1)
+#  )
+#ggsave(file.path(image, "timeseries_growthrates.png"))
 
 #median, mean, max, min for growth rates and removal of Not number
 print(median(industrial_production$IPG326S_CH1, na.rm = TRUE))
@@ -428,6 +428,17 @@ PPIValueMerger = PPIValueMerger %>%
 ######################################################################
 ######################################################################
 ######################################################################
+`
+
+
+
+
+
+
+
+
+
+
 
 #!Correlation part
 
@@ -436,22 +447,18 @@ library(tidyverse)
 correlation <- here("data", "correlation")
 
 rawCorrelationDf=read.csv(file.path(comparision, "complete_df.csv"))
-industrial_production = read.csv(file.path(introduction,"fredgraph_production_nondurable_goods_tires.csv"))
-industrial_production <- industrial_production %>%
+industrial_production_n = read.csv(file.path(correlation,"IPG32621N.csv"))
+industrial_production_n <- industrial_production_n %>%
 mutate(observation_date = as.Date(observation_date))
-summary(industrial_production)
-
-#adding tarrifs
-#NOW LOADING DATA FROM ./data/correlation and merging dataframes together and filtering redundant data,
+summary(industrial_production_n)
+######################
+#adding tarrifs to the rawcorrelationdf
 valueOfImports = read.csv(
   file = file.path(correlation, "import-census-4011.csv"), 
   sep = ";", 
   skip = 3, 
   header = TRUE
 )
-
-
-#Using complete_df.csv made in comparision part. 
 
 tarrifs_data <- valueOfImports %>%
   filter(str_detect(Time, " ") & !str_detect(Time, "through")) %>%
@@ -469,7 +476,7 @@ rawCorrelationDf <-rawCorrelationDf %>%
   )%>%
 left_join(tarrifs_data, by = c("observation_date" = "Date"))
   
-
+###################
 
 #main work ( chart and descriptive stats):
 
@@ -495,15 +502,14 @@ correlationDf <- rawCorrelationDf %>%
     import_ind = (importCifValue / importCifValue[startingIndex]) * 100,
     PPI_change =(PPI - lag(PPI)) / lag(PPI),
     importCifValue_ind=importCifValue/importCifValue[startingIndex]*100,
-    import_change =(importCifValue - lag(importCifValue/IPI)) / lag(importCifValue/IPI)
-    
+
   )%>%
 
   
   
-left_join(industrial_production, by = "observation_date") %>%
+left_join(industrial_production_n, by = "observation_date") %>%
   rename(
-    production = IPG326S,
+    production = IPG32621N,
     
     
   )%>%
@@ -512,36 +518,43 @@ left_join(industrial_production, by = "observation_date") %>%
     volume_ratio=production_ind/importCifValue_ind*100
   )
 
-# 1. Handle missing values (STL doesn't like NAs)
-# We filter to ensure we have a continuous time series for the adjustment
+#handle missing values (STL doesn't like NAs)
 df_for_sa <- correlationDf %>%
   filter(!is.na(quantity) & !is.na(importCifValue))
 
-# 2. Create Time Series objects
-# Adjust 'start' to your data's actual first year/month
-quantity_ts <- ts(df_for_sa$quantity, frequency = 12, start = c(2000, 1))
-cif_ts      <- ts(df_for_sa$importCifValue, frequency = 12, start = c(2000, 1))
+#seasonal function
+get_sa <- function(data_column, start_date = c(2000, 1)) {
+  varTs <- ts(data_column, frequency = 12, start = start_date)
+  
+  varDecomp <- stl(varTs, s.window = "periodic")
 
-# 3. Decompose and Extract Seasonal Components
-quantity_decomp <- stl(quantity_ts, s.window = "periodic")
-cif_decomp      <- stl(cif_ts, s.window = "periodic")
+  sa_values <- as.numeric(varTs - varDecomp$time.series[, "seasonal"])
+  
+  return(sa_values)
+}
 
 # 4. Add Seasonally Adjusted (SA) columns back to your dataframe
 df_for_sa <- df_for_sa %>%
   mutate(
-    quantity_SA = quantity - as.numeric(quantity_decomp$time.series[, "seasonal"]),
-    importCifValue_SA = importCifValue - as.numeric(cif_decomp$time.series[, "seasonal"]),
+    quantity_SA   = get_sa(quantity),
+    production_SA= get_sa(production),
+    PPI_SA=get_sa(PPI),
+    importCifValue_SA = get_sa(importCifValue),
     # Create an index for the SA quantity to match your other variables
     quantity_SA_ind = (quantity_SA / quantity_SA[startingIndex]) * 100,
     importCifValue_SA_ind = (importCifValue_SA / importCifValue_SA[startingIndex]) * 100,
     HSP_SA = importCifValue_SA / quantity_SA,
     HSP_SA_ind= (HSP_SA / HSP_SA[startingIndex]) * 100,
-    volume_ratio=production_ind/HSP_SA_ind*100,
+    volume_ratio=(production_ind/quantity_ind)*100,
+    volume_SA_ratio = ((production_SA / production_SA[startingIndex]) / (quantity_SA / quantity_SA[startingIndex])) * 100,
     price_ratio=PPI_ind/HSP_ind*100,
+    price_SA_ratio=PPI_SA/HSP_SA_ind*100,
     BLS_ind=BLS_Value/BLS_Value[startingIndex]*100,
     BLS_share=BLS_ind/PPI_ind*100,
     duty_ratio=calculatedDuty/importCifValue,
-    HSP_duty_ind=HSP_ind*(duty_ratio+1)
+    HSP_duty_ind=HSP_ind*(duty_ratio+1),
+    import_change =(importCifValue - lag(importCifValue/IPI)) / lag(importCifValue/IPI),
+    volume_ratio_change=(volume_ratio - lag(volume_ratio)) / lag(volume_ratio)
   )
 
 # 5. Use the SA data for your correlations
@@ -549,10 +562,20 @@ print("--- Raw Correlation ---")
 
 #REALLY COOL! +0.93 COR - means that with decrease of CPI, 
 cor(df_for_sa$BLS_share, df_for_sa$volume_ratio, use = "complete.obs")
-
+model <- lm(volume_ratio ~ BLS_share, data = df_for_sa)
+summary(model)
 #THIS CORRELATION IS MORE DEPRESING THAN FOOD FROM MENZA. CANT DEDUCT ANYTHING! -
-cor(df_for_sa$price_ratio, df_for_sa$volume_ratio, use = "complete.obs")
+cor(df_for_sa$price_SA_ratio, df_for_sa$volume_SA_ratio, use = "complete.obs")
+library(dplyr)
 
+# We create a new column where the price ratio is "shifted" forward by 2 months
+df_lagged <- df_for_sa %>%
+  mutate(price_ratio_lag2 = lag(price_ratio, 2))
+
+# Run the regression using the PAST price to predict CURRENT volume
+model_lagged <- lm(volume_ratio ~ price_ratio_lag2, data = df_lagged)
+
+summary(model_lagged)
 ggplot(data=df_for_sa, aes(x = observation_date)) +
   geom_line(aes(y = BLS_share, color = "1")) +
   geom_line(aes(y = volume_ratio, color = "2")) +
@@ -566,8 +589,6 @@ ggplot(data=df_for_sa, aes(x = observation_date)) +
     axis.text.x = element_text(angle = 45, hjust = 1)
 )
 
-library(tidyverse)
-library(slider)
 
 cor(df_for_sa$quantity_SA_ind, df_for_sa$price_ratio, use = "complete.obs")
 cor(correlationDf$price_ratio,correlationDf$volume_ratio)
@@ -595,7 +616,8 @@ ggsave(file.path(image, "prices.png"))
 
 ggplot(data=df_for_sa, aes(x = observation_date)) +
   geom_line(aes(y = price_ratio, color = "price ratio")) +
-  geom_line(aes(y = volume_ratio, color = "volume ratio")) +
+  geom_line(aes(y = volume_SA_ratio, color = "volume ratio")) +
+  geom_line(aes(y = BLS_share, color = "BLS ratio")) +
   
   scale_x_date(
     date_breaks = '3 years',
@@ -604,7 +626,16 @@ ggplot(data=df_for_sa, aes(x = observation_date)) +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
-  )
+)
+ggplot(data = df_for_sa, aes(x = price_SA_ratio, y = volume_SA_ratio)) +
+  geom_point(alpha = 0.5, color = "steelblue") +
+  geom_smooth(method = "lm", color = "red", se = TRUE) +
+  labs(
+    title = "BLS Share vs Volume Ratio",
+    x = "BLS Share",
+    y = "Volume SA Ratio"
+    ) +
+  theme_minimal()
 #NOW LOADING DATA FROM ./data/correlation and merging dataframes together and filtering redundant data,
 
 
@@ -617,7 +648,7 @@ ggplot(data=df_for_sa, aes(x = observation_date)) +
 #main work ( chart and descriptive stats):
 
 #3d histogram
-ggplot(df_for_sa, aes(x = PPI_change, y = IMPORT_change)) +
+ggplot(df_for_sa, aes(x = PPI, y = volume_ratio)) +
   # This creates the "3D" effect using color density
   geom_bin2d(bins = 30) + 
   scale_fill_viridis_c() + # A nice color scale for density
@@ -631,8 +662,8 @@ ggplot(df_for_sa, aes(x = PPI_change, y = IMPORT_change)) +
 
 #tariff 
 ggplot(data=df_for_sa, aes(x = observation_date)) +
-  geom_line(aes(y = HSP_duty_ind, color = "1")) +
-  geom_line(aes(y = HSP_ind, color = "2")) +
+  geom_line(aes(y = HSP_duty_ind, color = "HS + duty price")) +
+  geom_line(aes(y = HSP_ind, color = "HS price")) +
   
   scale_x_date(
     date_breaks = '3 years',
@@ -641,5 +672,10 @@ ggplot(data=df_for_sa, aes(x = observation_date)) +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
+  )+labs(
+    title = "Comparison of HSP and HSP duty Indices",
+    x = "Year",
+    y = "Price index ( 2000 as base year)",
+    color = "Legend"
   )
 ggsave(file.path(image,"tariff-price.png"))
