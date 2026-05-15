@@ -76,52 +76,43 @@ korelace
 cena (domacich)/zaharnicnich pneumatik, vuci volume
 \section{Development of tire production in the U.S. }
 
-As illustrated in Figure \ref{fig:figure1}, U.S. domestic tire production was largely stagnant at the beginning of the 21st century. Production began at a level of 127.5 and ended at 124.3 (the year 2017 serves as the base year) by the third quarter of 2007. Between 2008 and 2010, production experienced a sharp decline up to 20 percentage points, as demonstrated in Figure \ref{fig:figure2}. Although production initially saw a dramatic recovery in 2010, it quickly returned to a state of stagnation. Subsequently, the COVID-19 Pandemic triggered another severe contraction, with production dropping by more than 20 percent, though it rebounded by roughly 20 percent shortly after. Following this recovery, production began to stagnate and eventually after Russian-Ukrainian war started contracting even more. By the fourth quarter of 2020, the production level stood at 99.8, representing a slight decrease from Q4 2019, and ultimately fell to 72.8 by Q1 2026. 
+As illustrated in Figure \ref{fig:figure1}, U.S. domestic tire production was largely stagnant at the beginning of the 21st century. Production began at a level of 127.5 and ended at 124.3 (the year 2017 serves as the base year) by the third quarter of 2007. Between 2008 and 2010, production experienced a sharp decline up to 20 percentage points. Although production initially saw a dramatic recovery in 2010, it quickly returned to a state of stagnation. Subsequently, the COVID-19 Pandemic triggered another severe contraction, with production dropping by more than 20 percent, though it rebounded by roughly 20 percent shortly after. Following this recovery, production began to stagnate and eventually after Russian-Ukrainian war started contracting even more. By the fourth quarter of 2020, the production level stood at 99.8, representing a slight decrease from Q4 2019, and ultimately fell to 72.8 by Q1 2026. 
 
 The median growth rate stands at 0.43 percent and a mean at -0.58 percent. The maximum and minimum growth values were recorded at 22.04 percent in Q2 2021 and -22.82 percent in Q2 2020, respectively. The standard deviation of growth rates is 5.89 and for volumes of production stands at nearly 7.48. The median growth of the total US industrial production is nearly 1.63 and the mean is 0.58 percentage points. In comparison to the tire industry growth both values are higher. Although the maximum rate of growth was lower at 16.55 percent in 2021 in comparison to the tire industry, but the minimum value is larger as it stands at -17.31 in 2020. Both largest recoveries and slumps occurred in the same period during COVID-19 Pandemic.
 
 \begin{figure}[H]
     \centering
-    \begin{minipage}{0.48\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{images/timeseries_productionvolume.png}
-        \caption{U.S. domestic tire production volume}
-        \label{fig:figure1}
-    \end{minipage}\hfill 
-    \begin{minipage}{0.48\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{images/timeseries_growthrates.png}
-        \caption{Tire production growth rates}
-        \label{fig:figure2}
-    \end{minipage}
+    \includegraphics[width=0.5\textwidth]{images/timeseries_productionvolume.png}
+    \caption{Distribution of growth rates}
+    \label{fig:figure1}
 \end{figure}
 
-Furthermore, the accompanying boxplot, which is Figure \ref{fig:figure6}, indicates that the distribution of growth rates is rather left-skewed. This skewness is supported by the fact that the mean is being lower than the median. It is also notable that the majority of outliers fall below the mean, suggesting that the industry experienced a greater frequency of sharp declines compared to sudden recoveries. Prominent examples of these outliers include the drastic drop during the aforementioned COVID-19 pandemic, as well as the subsequent recovery phase in 2021.
+Furthermore, the accompanying boxplot, which is Figure \ref{fig:figure2}, indicates that the distribution of growth rates is rather left-skewed. This skewness is supported by the fact that the mean is being lower than the median. It is also notable that the majority of outliers fall below the mean, suggesting that the industry experienced a greater frequency of sharp declines compared to sudden recoveries. Prominent examples of these outliers include the drastic drop during the aforementioned COVID-19 pandemic, as well as the subsequent recovery phase in 2021.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{images/boxplot.png}
     \caption{Distribution of growth rates}
-    \label{fig:figure6}
+    \label{fig:figure2}
 \end{figure}
 
 \section{Mapping global imports to the U.S.}
-Figure \ref{fig:figure7} shows a right‑skewed histogram of tire imports to the US in 2025 from the forty countries with the largest import volumes. The graph indicates that the most countries supply from few hundreds to few thousands of tires while a small number supply very large quantities. The smallest recorded import is 533 tires from Russia, this low figure is probably because of sanctions imposed on Russia since 2022, although some tire shipments have still probably occurred. Thailand is the largest supplier in the dataset, which is probably because of Thailand’s leading role in global natural rubber production, which was about 36 percent of global supply in 2025, and also that Thailand is known as ‘Detroit of Asia’.
+Figure \ref{fig:figure3} shows a right‑skewed histogram of tire imports to the US in 2025 from the forty countries with the largest import volumes. The graph indicates that the most countries supply from few hundreds to few thousands of tires while a small number supply very large quantities. The smallest recorded import is 533 tires from Russia, this low figure is probably because of sanctions imposed on Russia since 2022, although some tire shipments have still probably occurred. Thailand is the largest supplier in the dataset, which is probably because of Thailand’s leading role in global natural rubber production, which was about 36 percent of global supply in 2025, and also that Thailand is known as ‘Detroit of Asia’.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.45\textwidth]{images/histogram-of-importers.png}
     \caption{Histogram of tire importers}
-    \label{fig:figure7}
+    \label{fig:figure3}
 \end{figure}
 
-Figure \ref{fig:figure7} is highly right-skewed, it is only seen that most of the observations are near zero with few extremes in hundreds of millions of units. Figure \ref{fig:figure8} which is a histogram using logarithmic scale, gives a better picture of the distribution. Additionally, multiple peaks are revealed. The bulk of the import values form a primary cluster between 10 million and 1 billion, alongside a smaller grouping of lower value imports in the tens of thousands. 
+Figure \ref{fig:figure3} is highly right-skewed, it is only seen that most of the observations are near zero with few extremes in hundreds of millions of units. Figure \ref{fig:figure4} which is a histogram using logarithmic scale, gives a better picture of the distribution. Additionally, multiple peaks are revealed. The bulk of the import values form a primary cluster between 10 million and 1 billion, alongside a smaller grouping of lower value imports in the tens of thousands. 
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.45\textwidth]{images/loghistogram-of-importers.png}
     \caption{Logarithmic histogram of importers}
-    \label{fig:figure8}
+    \label{fig:figure4}
 \end{figure}
 
 \section{Comparision part}
