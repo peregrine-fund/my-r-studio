@@ -387,9 +387,12 @@ ppiPrices2000r = remove_missing(ppiPrices2000)
 indeXPCU = ppiPrices2000r$PCU3262132621 [c(1)]
 indeXIZ =  ppiPrices2000r$IZ32621 [c(1)]
 ideXHS = ppiPrices2000r$hsPrice [c(1)]
+indeXBLS = ppiPrices2000r$BLS_Value [c(1)]
 ppiPrices2000r$PCU3262132621=ppiPrices2000r$PCU3262132621 /(indeXPCU*0.01)
 ppiPrices2000r$IZ32621 = ppiPrices2000r$IZ32621/(indeXIZ*0.01)
 ppiPrices2000r$hsPrice = ppiPrices2000r$hsPrice/(ideXHS*0.01)
+ppiPrices2000r$BLS_Value = ppiPrices2000r$BLS_Value/(indeXBLS*0.01)
+
 
 #scatter plot graph between PPU and IZ
 ggplot(data = ppiPrices2000r,aes(x=IZ32621,y=PCU3262132621)) +
