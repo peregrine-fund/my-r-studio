@@ -585,8 +585,8 @@ ggplot(data = df_for_sa, aes(x = BLS_SA_share, y = volume_SA_ratio)) +
   geom_smooth(method = "lm", color = "red", se = TRUE) +
   labs(
     title = "Relation between CPI/PPI and Domestic production/quality of imports ",
-    x = "CPI/PPI",
-    y = "Domestic production/quality of imports"
+    x = "CPI/PPI ( base year 2000 = 100)",
+    y = "Domestic production/quality of imports( base year 2000 = 100)"
     ) +
   theme_minimal()
 ggsave(file.path(image, "bls-scatterplot.png"))
