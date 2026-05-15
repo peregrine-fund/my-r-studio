@@ -346,8 +346,8 @@ ggplot(data=ppiPrices2000r, aes(x=observation_date)) +
   geom_line(aes(y = IZ32621, color = "Import price index")) +
   geom_line(aes(y = PCU3262132621, color = "Producer price index")) +
   geom_line(aes(y = BLS_Value, color = "Consumer price index"))+ 
-  labs(y = 'growth') 
-
+  labs(y = 'growth',x="year") 
+ggsave(file.path(image,"TimSeriesHSIZPCUBLS.png"))
 
 
 #unifying time period
