@@ -10,18 +10,18 @@
 
 \maketitle
         
-\subsection*{Abbrevations}
-BLS - bureau of Labor statistics , HS - harmonized system, NAICS - North American Industry Classification System, FRED - Federal Reserve Economic Data
+\subsection*{Abbreviations}
+BLS - bureau of Labor statistics, HS - harmonized system, NAICS - North American Industry Classification System, FRED - Federal Reserve Economic Data, PPI - producer price index, IPI - import price index, CMGR - compound monthly growth rate,  CPI - consumer price index, CIF - Cost, Insurance and Freight 
 \section{Introduction}
 \subsection*{Why US tires?}
 
-For a long time tires were a boring business that growed bellow gdp levels and generated stable margins. Hovewer in the past 2 years the equities of tire sector ( tire and carbon black manufacturers) have dropped significantly.
+For a long time tires were a boring business that grew bellow GDP levels and generated stable margins. However in the past 2 years the equities of tire sector (tire and carbon black manufacturers) have dropped significantly.
 
-Managements of carbon black manufacturer Orion S.A. and Cabot explained in their quarterly conferences that reason for having pricing pressure and negative revenue growth was primarly from 2022 supply shock when consumers started prioritizing less quality tires imported from southeast Asia in order to cut costs. Imports from Southeast Asia have  increased in 2025 to a point that 70\% of tires sold in USA are foreing made ( in comparision to 50\% in prepandemic era).
+Managements of carbon black manufacturer Orion S.A. and Cabot explained in their quarterly conferences that reason for having pricing pressure and negative revenue growth was primarily from 2022 supply shock when consumers started prioritizing less quality tires imported from southeast Asia in order to cut costs. Imports from Southeast Asia have  increased in 2025 to a point that 70\% of tires sold in USA are foreign made (in comparison to 50\% in prepandemic era).
 
 In conclusion US domestic tire industry could be suffering from overseas competition due to pricing pressure. The project will try to find whether higher domestic prices leads to higher share of foreign made tires in US. 
-Our empirical claims is that a) domestic tires have increased in price compared to foreign made price and this leads to consumer prefering foreing made tires.
-whether increases in domestic prices relative to imported prices of tires
+Our empirical claims is that a) domestic tires have increased in price compared to foreign made price and this leads to consumer preferring foreign made tires.
+Whether increases in domestic prices relative to imported prices of tires
 
 \subsection*{Sources of data}
 Thankfully US has agencies that report data about tires monthly. Here is the list of all data sources for the study.
@@ -48,15 +48,16 @@ BLS & PPI, CPI, and productivity data. \\ \hline
 Lukáš was responsible for describing the U.S. tire production volume and growth rates. He also compared this data with the total U.S. industrial production. And he constructed histograms to map global tire imports to the U.S.
 
 \textbf{Jakub Cerny} \\
-Correlation part, controling code, downloadig data
+Jakub was responsible for the correlation part, controlling code, choosing, and downloading data.
+
 \textbf{Michal Stransky} \\
-Development of tire production in the US, comparison of PPI, CPI, HS a IPI and related graphs and datatasets.
+Development of tire production in the US, comparison of PPI, CPI, HS a IPI and related graphs and datasets.
 
-\section{Development of tire production in the U.S. }
+\section{Development of tire production in the US }
 
-As illustrated in Figure \ref{fig:figure1}, U.S. domestic tire production was largely stagnant at the beginning of the 21st century. Production began at a level of 127.58 and ended at 120.95 (the year 2017 serves as the base year) by the third quarter of 2007. Between 2008 and 2010, production experienced a sharp decline up to 20 percentage points. Although production initially saw a dramatic recovery in 2010, it quickly returned to a state of stagnation. Subsequently, the COVID-19 Pandemic triggered another severe contraction, with production dropping by more than 80 percent, though it rebounded by roughly 300 percent shortly after. Following this recovery, production began to stagnate and eventually after Russian-Ukrainian war started contracting even more and ultimately fell to 74.42 by Q1 2026. 
+As illustrated in Figure \ref{fig:figure1}, US domestic tire production was largely stagnant at the beginning of the 21st century. Production began at a level of 127.58 and ended at 120.95 (the year 2017 serves as the base year) by the third quarter of 2007. Between 2008 and 2010, production experienced a sharp decline up to 20 percentage points. Although production initially saw a dramatic recovery in 2010, it quickly returned to a state of stagnation. Subsequently, the COVID-19 pandemic triggered another severe contraction, with production dropping by more than 80 percent, though it rebounded by roughly 300 percent shortly after. Following this recovery, production began to stagnate and eventually after Russian-Ukrainian war started contracting even more and ultimately fell to 74.42 by Q1 2026. 
 
-The median growth rate stands nearly at 0.099 percent and a mean at 0.997 percent. The maximum and minimum growth values were recorded at 300.88 percent in May 2020 and -88.42 percent in April 2020, respectively. The median growth of the total US industrial production is nearly 1.63 and the mean is 0.58 percentage points. In comparison to the tire industry the median is higher but the mean is lower. The tire industry sector has higher mean because of extreme values during COVID-19 Pandemic. It is also an indicator of the fact that the total industrial U.S. production was more stable and less erratic than the tire industry The maximum rate of growth of total industrial production was much lower at 16.55 percent in 2021 in comparison to the tire industry, but the minimum value is larger as it stands at -17.31 in 2020. That means that the tire industry is much more volatile.
+The median growth rate stands nearly at 0.099 percent and the mean at 0.997 percent. The maximum and minimum growth values were recorded at 300.88 percent in May 2020 and -88.42 percent in April 2020, respectively. The median growth of the total US industrial production is nearly 1.63 and the mean is 0.58 percentage points. In comparison to the tire industry the median is higher but the mean is lower. The tire industry sector has higher mean because of more extreme values during COVID-19 Pandemic. It is also an indicator of the fact that the total industrial US production was more stable and less erratic than the tire industry. The maximum rate of growth of total industrial production was much lower at 16.55 percent in 2021 in comparison to the tire industry, but the minimum value is larger as it stands at -17.31 in 2020. That means that the tire industry is much more volatile.
 
 \begin{figure}[H]
     \centering
@@ -74,7 +75,7 @@ Furthermore, the accompanying boxplot, which is Figure \ref{fig:figure2}, indica
     \label{fig:figure2}
 \end{figure}
 
-\section{Mapping global imports to the U.S.}
+\section{Mapping global imports to the US}
 Figure \ref{fig:figure3} shows a right‑skewed histogram of tire imports to the US in 2025 from the forty countries with the largest import volumes. The graph is right-skewed because most countries supply only few hundreds or few thousands of tires while a small number of countries supply very large quantities of tires. The smallest recorded import is 533 tires from Russia, this low figure is probably because of sanctions imposed on Russia since 2022, although some tire shipments have still probably occurred. Thailand is the largest supplier in the dataset, which is probably because of Thailand’s leading role in global natural rubber production, which was about 36 percent of global supply in 2025, and also that Thailand is known as ‘Detroit of Asia’.
 
 \begin{figure}[H]
@@ -84,7 +85,7 @@ Figure \ref{fig:figure3} shows a right‑skewed histogram of tire imports to the
     \label{fig:figure3}
 \end{figure}
 
-Figure \ref{fig:figure3} is highly right-skewed, it is only seen that most of the observations are near zero with few extremes in hundreds of millions of units. Figure \ref{fig:figure4} which is a histogram using logarithmic scale, gives a better picture of the distribution. Additionally, multiple peaks are revealed. The bulk of the import values form a primary cluster between 10 million and 1 billion, alongside a smaller grouping of lower value imports in the tens of thousands. 
+Figure \ref{fig:figure3} is highly right-skewed, It is only seen that most of the observations are near zero with few extremes in hundreds of millions of units. Figure \ref{fig:figure4}, which is a histogram using logarithmic scale, gives a better picture of the distribution. Additionally, multiple peaks are revealed. The bulk of the import values form a primary cluster between 10 million and 1 billion, alongside a smaller grouping of lower value imports in the tens of thousands. 
 
 \begin{figure}[H]
     \centering
@@ -95,20 +96,20 @@ Figure \ref{fig:figure3} is highly right-skewed, it is only seen that most of th
 
 \section{Comparison part}
 The 4 compared values are Producer price index, Import price index, Consumer price index, and harmonized price index, in the tire industry. The producer price index measures the change in expanses for domesticate producers in the specific industry, and the import price index measures the change in the price of imported goods. Harmonized index is created using the total volume of tires imported to the USA, divided by the total value of imported tires. The consumer price index measures the price of the good for consumers.
-We can see relatively strong correlation between all four values. As all of them are connected to the price of tires, it can be assumed, that certain factors, such as the price of raw materials, the demand for tires or global economic crises, would affect these values in a similar way. Therefore, it is not surprising that all correlations of these values are very high and between 0.87 and 0.98. We can also look at their average growth using CMGR coefficient, it can be argued that in this situation it’s superior to average change, as it is more informative about total difference. Greatest growth of about 0.25\% was in PPI, HS was about 0.21\% and IPI and CPI were both under 0.16\%. This implies that domestic prices grew faster than imported, and it can be assumed that this could have created some decline in domestic production. All values sharply increased in early 2020s, and while PPI remained high, all other values slightly decreased. 
+We can see relatively strong correlation between all four values. As all of them are connected to the price of tires, it can be assumed, that certain factors, such as the price of raw materials, the demand for tires or global economic crises, would affect these values in a similar way. Therefore, it is not surprising that all correlations of these values are very high and between 0.87 and 0.98. We can also look at their average growth using CMGR coefficient, it can be argued that in this situation it is superior to average change, as it is more informative about total difference. Greatest growth of about 0.25\% was in PPI, HS was about 0.21\% and IPI and CPI were both under 0.16\%. This implies that domestic prices grew faster than imported, and it can be assumed that this could have created some decline in domestic production. All values sharply increased in early 2020s, and while PPI remained high, all other values slightly decreased. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.45\textwidth]{images/TimSeriesHSIZPCUBLS.png}
     \label{fig:figure8}
 \end{figure}
- When we compare PPI and IPI, we can see, that their behavior was similar until 2011, in that time IPI started to grow faster than, but in 2014, it was overcome by PPI, and since than was PPI much greater. Since 2015 was therefore relatively cheaper to buy imported pneumatics, compared to year 2000. This difference has increased in the last few years.  When we compare PPI and IPI, we can see, that their behavior was similar until 2011, in that time IPI started to grow faster than, but in 2014, it was overcome by PPI, and since than was PPI much greater. Since 2015 was therefore relatively cheaper to buy imported pneumatics, compared to year 2000. This difference has increased in the last few years. 
+ When we compare PPI and IPI, we can see that their behavior was similar until 2011, in that time IPI started to grow faster than, but in 2014, it was overcome by PPI, and since then was PPI much greater. Since 2015 was therefore relatively cheaper to buy imported pneumatics, compared to year 2000. This difference has increased in the last few years. 
  
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.45\textwidth]{images/PcuIzCorellation.png}
     \label{fig:figure8}
 \end{figure}
-When we compare HS index and PPI. We can see that this coefficient behaved similarly. When both values increased in 2011 and during 19 pandemic, HS price was more sensitive, possibly due to caution, and fear of rise of price from producers. Contrary to PPI, HS again decreased after the pandemic, possibly due to cheaper imported goods. 
+When we compare HS index and PPI. We can see that this coefficient behaved similarly. When both values increased in 2011 and during COVID-19 pandemic, HS price was more sensitive, possibly due to caution, and fear of rise of price from producers. Contrary to PPI, HS again decreased after the pandemic, possibly due to cheaper imported goods. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.45\textwidth]{images/PpiHsCorellation.png}
@@ -116,10 +117,10 @@ When we compare HS index and PPI. We can see that this coefficient behaved simil
 \end{figure}
 
 \section{Corelation part}
-Due to imports of tires into USA have seasonal trends, we seasonally adjusted data ( both volumes and prices).
+Due to imports of tires into the US, the US has seasonal trends, we seasonally adjusted data ( both volumes and prices).
  
 \subsection{Results} 
-We cant prove our claim that domestic tires grown dramaticaly in price compared to foreign made tires. 
+We cannot prove our claim that domestic tires grew dramatically in price compared to foreign made tires. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.45\textwidth]{images/price-ratio.png}
@@ -128,17 +129,17 @@ We cant prove our claim that domestic tires grown dramaticaly in price compared 
 
 
 
-Secondly theres no correlation between the PPI/HS ratio and domestic share of tires produced ( correlation 
+Secondly, there is no correlation between the PPI/HS ratio and domestic share of tires produced ( correlation 
 
 
-PPI has a correlation of 0.90 compared to domestic share of tires produced. 
+The PPI has a correlation of 0.90 compared to domestic share of tires produced. 
 
-By increasing PPI of tires, consumers may switch to cheap foreign made tires to offset price hike. 
-We can see figure bellow comparing CPI/PPI ratio to domestic production/quantity imported ratio. As more goods are foreign made, consumer pays on average less compared to prices of domesticly produced tires. 
+By increasing PPI of tires, consumers may consider switching to cheap foreign made tires to offset price increase. 
+We can see that figure bellow comparing CPI/PPI ratio to domestic production/quantity imported ratio. As more goods are foreign made, consumer pays on average less compared to prices of domestically produced tires. 
 
 
 \subsection{Deficiencies} 
-Note that CIF value includes cost of insurance and shipments but doesnt add tarriffs! Therefore the dramatic decline of CIF prices in later half of 2025 is without the tariff impact. The reason for not adding tariff charges to the CIF value is that import price index doesnt include it as well and it is not know if the prices of the tarrifs are passed out to customers. 
+Note that CIF value includes cost of insurance and shipments but it does not add tariffs! Therefore, the dramatic decline of CIF prices in the later half of 2025 is without the tariff impact. The reason for not adding tariff charges to the CIF value is that import price index does not include it as well and it is not know if the prices of the tariffs are passed out to customers. 
 
 
 \begin{figure}[H]
@@ -149,19 +150,17 @@ Note that CIF value includes cost of insurance and shipments but doesnt add tarr
 
 
 
-Deficiencies of our statisitcal model: quantity of tires imported 
-NAICS and HS systems do not record same products. For NAICS we extracted group 326211 ( called tire manufacturing). This group includes in addition to 4011 ( new tires) also 4012 ( retreaded or used pneumatic tires) and 4013 HS products ( inner tubes from rubber). When extracting CIF value and quantity we only used 4011 group. 
+Deficiencies of our statistical model: the number of tires imported 
+from the NAICS and HS systems does not record the same products. For NAICS we extracted group 326211 (called tire manufacturing). This group includes in addition to 4011 (new tires) also 4012 (retreaded or used pneumatic tires) and 4013 HS products (inner tubes from rubber). When extracting CIF value and quantity, we only used 4011 group. 
 
-We used HS import data because import price index for 326211 tire manufacturing had only data from year 2005. In addition due to lack of funding,
-CIF measure tires imported when tires are taken in port. Hovewer some tires may be shipped to warehouses to sit there for a undefined time period. Thus its wrong to compare CIF and CPI prices because some goods imported wont be measured by the CPI method.
+We used HS import data because the import price index for 326211 tire manufacturing had only data from 2005. In addition, due to lack of funding, CIF measures tires imported when tires are taken in port. However, some tires may be shipped to warehouses to sit there for undefined time period. Thus, it is wrong to compare CIF and CPI prices because some goods imported will not be measured by the CPI method.
 Also price of
 Other reasons for higher tire imports may include: quality
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.45\textwidth]{images/bls-scatterplot.png}
     \label{fig:figure8}
-\end{figure}
-Ratio of domestic price to foreign price 
+\end{figure} 
 \subsection{Harmonized price}
 
 
