@@ -400,13 +400,17 @@ ppiPrices2000r$BLS_Value = ppiPrices2000r$BLS_Value/(indeXBLS*0.01)
 #scatter plot graph between PPU and IZ
 ggplot(data = ppiPrices2000r,aes(x=IZ32621,y=PCU3262132621)) +
   geom_point(size=1,color=1) +
-  geom_smooth(method = 'lm')
+  geom_smooth(method = 'lm')+ 
+  labs(x = 'IPI') +
+  labs(y = 'PPI')
 ggsave(file.path(image, "PcuIzCorellation.png"))
 
 #scatter plot graph between PPU and HS price
 ggplot(data = ppiPrices2000r,aes(x=hsPrice,y=PCU3262132621)) +
   geom_point(size=1,color=1) +
-  geom_smooth(method = 'lm')
+  geom_smooth(method = 'lm')+ 
+  labs(x = 'HS') +
+  labs(y = 'PPI')
 ggsave(file.path(image, "PpiHsCorellation.png"))
 
 
@@ -430,7 +434,8 @@ ggplot(data=ppiPrices2000r, aes(x=observation_date)) +
   geom_line(aes(y = hsPrice, color = "HS price")) +
   geom_line(aes(y = IZ32621, color = "Import price index")) +
   geom_line(aes(y = PCU3262132621, color = "Producer price index")) +
-  geom_line(aes(y = BLS_Value, color = "Consumer price index"))
+  geom_line(aes(y = BLS_Value, color = "Consumer price index"))+ 
+  labs(y = 'growth') 
 
 
 
