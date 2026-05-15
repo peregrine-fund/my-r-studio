@@ -6,7 +6,7 @@ library(here)
 library(tidyverse)
 library(readr)
 library(stringr)
-
+\usepackage{graphicx}
 # USE these variables to specify paths where to save.
 introduction = here("data","introduction")
 comparision= here("data","comparision")
