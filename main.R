@@ -503,7 +503,7 @@ print("--- Raw Correlation ---")
 
 #REALLY COOL! +0.93 COR - means that with decrease of CPI, 
 cor(df_for_sa$BLS_SA_share, df_for_sa$volume_SA_ratio, use = "complete.obs")
-cor(df_for_sa$BLS_SA_share, df_for_sa$volume_SA_ratio, use = "complete.obs")
+cor(df_for_sa$PPI_SA, df_for_sa$volume_SA_ratio, use = "complete.obs")
 
 model <- lm(volume_ratio ~ BLS_share, data = df_for_sa)
 summary(model)
