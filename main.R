@@ -47,20 +47,23 @@ ggplot(industrial_production, aes(x = observation_date, y = IPG32621S)) +
   )
 ggsave(file.path(image, "timeseries_productionvolume.png"))
 
+industrial_production <- industrial_production %>%
+  arrange(observation_date) %>% # Ensure data is in chronological order
+  mutate(IPG326S_CH1 = (IPG32621S - lag(IPG32621S)) / lag(IPG32621S) * 100)
 #time series graph for production volumes growth rates
-#ggplot(industrial_production, aes(x = observation_date, y = IPG326S_CH1)) +
- # geom_line(size = 1.2) +
-  #scale_x_date(
-   # date_breaks = "3 years",
-    #date_labels = "%Y"
-#  ) +
-#  theme_minimal() +
-#  labs(x = 'Year') +
-#  labs(y = 'Annual Growth Rate (%)') +
-#  theme(
-#    axis.text.x = element_text(angle = 45, hjust = 1)
-#  )
-#ggsave(file.path(image, "timeseries_growthrates.png"))
+ggplot(industrial_production, aes(x = observation_date, y = IPG326S_CH1)) +
+  geom_line(size = 1.2) +
+  scale_x_date(
+  date_breaks = "3 years",
+  date_labels = "%Y"
+   ) +
+  theme_minimal() +
+  labs(x = 'Year') +
+  labs(y = 'Annual Growth Rate (%)') +
+  theme(
+  axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+ ggsave(file.path(image, "timeseries_growthrates.png"))
 
 #median, mean, max, min for growth rates and removal of Not number
 print(median(industrial_production$IPG326S_CH1, na.rm = TRUE))
@@ -387,9 +390,12 @@ ppiPrices2000r = remove_missing(ppiPrices2000)
 indeXPCU = ppiPrices2000r$PCU3262132621 [c(1)]
 indeXIZ =  ppiPrices2000r$IZ32621 [c(1)]
 ideXHS = ppiPrices2000r$hsPrice [c(1)]
+indeXBLS = ppiPrices2000r$BLS_Value [c(1)]
 ppiPrices2000r$PCU3262132621=ppiPrices2000r$PCU3262132621 /(indeXPCU*0.01)
 ppiPrices2000r$IZ32621 = ppiPrices2000r$IZ32621/(indeXIZ*0.01)
 ppiPrices2000r$hsPrice = ppiPrices2000r$hsPrice/(ideXHS*0.01)
+ppiPrices2000r$BLS_Value = ppiPrices2000r$BLS_Value/(indeXBLS*0.01)
+
 
 #scatter plot graph between PPU and IZ
 ggplot(data = ppiPrices2000r,aes(x=IZ32621,y=PCU3262132621)) +
