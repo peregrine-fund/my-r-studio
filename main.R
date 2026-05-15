@@ -6,7 +6,7 @@ library(here)
 library(tidyverse)
 library(readr)
 library(stringr)
-\usepackage{graphicx}
+
 # USE these variables to specify paths where to save.
 introduction = here("data","introduction")
 comparision= here("data","comparision")
@@ -611,8 +611,8 @@ summary(model_lagged)
 
 
 ggplot(data=df_for_sa, aes(x = observation_date)) +
-  geom_line(aes(y = BLS_share, color = "1")) +
-  geom_line(aes(y = volume_ratio, color = "2")) +
+  geom_line(aes(y = price_SA_ratio, color = "PPI/HS price ratio")) +
+  geom_line(aes(y = volume_SA_ratio, color = "domestic production / quality imported ratio")) +
   
   scale_x_date(
     date_breaks = '3 years',
@@ -621,8 +621,12 @@ ggplot(data=df_for_sa, aes(x = observation_date)) +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1)
-)
-
+) +labs(
+  title = "Density of Monthly % Changes",
+  x = "year",
+  y = "Index (base year 2000)",
+) 
+ggsave(file.path(image, "price-ratio.png"))
 
 cor(df_for_sa$quantity_SA_ind, df_for_sa$price_ratio, use = "complete.obs")
 cor(correlationDf$price_ratio,correlationDf$volume_ratio)
