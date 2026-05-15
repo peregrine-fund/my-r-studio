@@ -408,9 +408,23 @@ cor(ppiPrices2000r$IZ32621,ppiPrices2000r$PCU3262132621)
 cor(ppiPrices2000r$hsPrice,ppiPrices2000r$PCU3262132621)
 cor(ppiPrices2000r$hsPrice,ppiPrices2000r$IZ32621)
 
+#CARG values of idexes
 CagrPcu= ((ppiPrices2000$PCU3262132621 [c(315)])/ppiPrices2000$PCU3262132621 [c(1)])**(1/315)-1
 CagrIz= ((ppiPrices2000r$IZ32621 [c(243)])/ppiPrices2000r$IZ32621 [c(1)])**(1/243)-1
 CagrHs= ((ppiPrices2000$hsPrice [c(315)])/ppiPrices2000$hsPrice [c(1)])**(1/315)-1 
+CagrBLS= ((ppiPrices2000$BLS_Value [c(315)])/ppiPrices2000$BLS_Value [c(1)])**(1/315)-1
+
+ppiPrices2000r=ppiPrices2000r %>%
+  mutate(
+    observation_date = as.Date(observation_date)
+  )
+
+#time sereies
+ggplot(data=ppiPrices2000r, aes(x=observation_date)) +
+  geom_line(aes(y = hsPrice, color = "HS price")) +
+  geom_line(aes(y = IZ32621, color = "Import price index")) +
+  geom_line(aes(y = PCU3262132621, color = "Producer price index")) +
+  geom_line(aes(y = BLS_Value, color = "Consumer price index"))
 
 
 
@@ -421,6 +435,8 @@ PPIValueMerger = PPIValueMerger %>%
   bind_cols(valueOfImportsMonths %>% select(CIF.Value..Gen....US.)) %>%
   mutate(CIF.Value..Gen....US. = as.numeric(str_remove_all(`CIF.Value..Gen....US.`, "[,$]")) / 1e6
   )
+
+
 
 
 ######################################################################
